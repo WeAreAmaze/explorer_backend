@@ -437,12 +437,12 @@ msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/templates/layout/_footer.html.eex:22
-msgid "Blockscout is a tool for inspecting and analyzing EVM based blockchains. Blockchain explorer for Ethereum Networks."
+msgid "Blockscout is a tool for inspecting and analyzing EVM based blockchains. Blockchain explorer for MetaChain Networks."
 msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/templates/stakes/_stakes_top.html.eex:45
-msgid "Bridge STAKE to Ethereum"
+msgid "Bridge STAKE to MetaChain"
 msgstr ""
 
 #, elixir-format
@@ -457,7 +457,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/templates/layout/_topnav.html.eex:78
-msgid "Bridged from Ethereum"
+msgid "Bridged from MetaChain"
 msgstr ""
 
 #, elixir-format
@@ -1030,12 +1030,12 @@ msgstr ""
 #: lib/block_scout_web/templates/address_token/overview.html.eex:1
 #: lib/block_scout_web/templates/smart_contract/_functions.html.eex:93 lib/block_scout_web/templates/smart_contract/_functions.html.eex:93
 #: lib/block_scout_web/templates/smart_contract/_functions.html.eex:135
-msgid "ETH"
+msgid "MTC"
 msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/templates/api_docs/eth_rpc.html.eex:4
-msgid "ETH RPC API Documentation"
+msgid "MTC RPC API Documentation"
 msgstr ""
 
 #, elixir-format

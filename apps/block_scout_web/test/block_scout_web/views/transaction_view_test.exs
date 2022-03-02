@@ -160,7 +160,7 @@ defmodule BlockScoutWeb.TransactionViewTest do
       assert TransactionView.formatted_result(status) == "Pending"
     end
 
-    test "with block without status (pre-Byzantium/Ethereum Class)" do
+    test "with block without status (pre-Byzantium/MetaChain Class)" do
       block = insert(:block)
 
       transaction =

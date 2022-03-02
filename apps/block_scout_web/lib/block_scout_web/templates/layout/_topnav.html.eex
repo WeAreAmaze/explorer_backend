@@ -75,9 +75,9 @@
                       to: tokens_path(@conn, :index)
                     ) %>
                 <%= link(
-                      gettext("Bridged from Ethereum"),
-                      class: "dropdown-item #{tab_status("bridged-tokens/eth", @conn.request_path)}",
-                      to: bridged_tokens_path(@conn, :show, :eth),
+                      gettext("Bridged from MetaChain"),
+                      class: "dropdown-item #{tab_status("bridged-tokens/mtc", @conn.request_path)}",
+                      to: bridged_tokens_path(@conn, :show, :mtc),
                       style: "white-space: nowrap;"
                     ) %>
                 <%= link(
@@ -135,7 +135,7 @@
                     to: api_url() <> api_docs_path(@conn, :index)
                   ) %>
               <%= link(
-                    gettext("Eth RPC"),
+                    gettext("MTC RPC"),
                     class: "dropdown-item #{tab_status("eth-rpc-api-docs", @conn.request_path)}",
                     to: api_url() <> api_docs_path(@conn, :eth_rpc)
                   ) %>

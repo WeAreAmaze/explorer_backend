@@ -1265,9 +1265,9 @@ defmodule BlockScoutWeb.Etherscan do
   }
 
   @account_eth_get_balance_action %{
-    name: "eth_get_balance",
+    name: "mtc_get_balance",
     description:
-      "Mimics Ethereum JSON RPC's eth_getBalance. Returns the balance as of the provided block (defaults to latest)",
+      "Mimics MetaChain JSON RPC's mtc_getBalance. Returns the balance as of the provided block (defaults to latest)",
     required_params: [
       %{
         key: "address",
@@ -2278,8 +2278,8 @@ defmodule BlockScoutWeb.Etherscan do
   }
 
   @block_eth_block_number_action %{
-    name: "eth_block_number",
-    description: "Mimics Ethereum JSON RPC's eth_blockNumber. Returns the lastest block number",
+    name: "mtc_block_number",
+    description: "Mimics MetaChain JSON RPC's mtc_blockNumber. Returns the lastest block number",
     required_params: [],
     optional_params: [
       %{

@@ -517,7 +517,7 @@ defmodule Explorer.Staking.ContractReader do
     result =
       %{
         id: 0,
-        method: "eth_getLogs",
+        method: "mtc_getLogs",
         params: [
           %{
             fromBlock: "0x" <> Integer.to_string(from_block, 16),
