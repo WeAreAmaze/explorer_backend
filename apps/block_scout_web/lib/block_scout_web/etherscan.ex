@@ -2140,7 +2140,7 @@ defmodule BlockScoutWeb.Etherscan do
   }
 
   @stats_ethsupplyexchange_action %{
-    name: "ethsupplyexchange",
+    name: "mtcsupplyexchange",
     description: "Get total supply in Wei from exchange.",
     required_params: [],
     optional_params: [],
@@ -2166,7 +2166,7 @@ defmodule BlockScoutWeb.Etherscan do
   }
 
   @stats_ethsupply_action %{
-    name: "ethsupply",
+    name: "mtcsupply",
     description: "Get total supply in Wei from DB.",
     required_params: [],
     optional_params: [],
@@ -2726,7 +2726,7 @@ defmodule BlockScoutWeb.Etherscan do
   @contract_verifysourcecode_action %{
     name: "verifysourcecode",
     description: """
-    Verify a contract with Standard input JSON file. Its interface the same as <a href="https://docs.etherscan.io/tutorials/verifying-contracts-programmatically">Etherscan</a>'s API endpoint
+    Verify a contract with Standard input JSON file. Its interface the same as <a href="https://docs.etherscan.io/tutorials/verifying-contracts-programmatically">MTC</a>'s API endpoint
     <br/>
     <br/>
     """,
