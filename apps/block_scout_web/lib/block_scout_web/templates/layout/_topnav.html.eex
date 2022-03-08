@@ -124,7 +124,7 @@
               <%= gettext("APIs") %>
             </a>
             <div class="dropdown-menu" aria-labeledby="navbarTransactionsDropdown"> 
-              <%= link(
+              <%# <%= link(
                     gettext("GraphQL"),
                     class: "dropdown-item #{tab_status("graphiql", @conn.request_path)}",
                     to: api_url() <> "/graphiql"
@@ -134,11 +134,11 @@
                     class: "dropdown-item #{tab_status("api-docs", @conn.request_path)}",
                     to: api_url() <> api_docs_path(@conn, :index)
                   ) %>
-              <%= link(
+              <%# <%= link(
                     gettext("MTC RPC"),
                     class: "dropdown-item #{tab_status("eth-rpc-api-docs", @conn.request_path)}",
                     to: api_url() <> api_docs_path(@conn, :eth_rpc)
-                  ) %>
+                  ) %> 
             </div>
           </li>
         <% end %>
@@ -189,10 +189,11 @@
             <%= for %{url: url, title: title} <- test_nets(dropdown_nets()) do %> 
               <a class="dropdown-item" href="<%= url %>"><%= title %></a>
             <% end %> 
-            <a class="dropdown-item header division">Other Networks</a> 
+
+            <%# <a class="dropdown-item header division">Other Networks</a> 
             <%= for %{url: url, title: title} <- dropdown_other_nets() do %>  
-              <a class="dropdown-item" href="<%= url %>"><%= title %></a>
-            <% end %> 
+               <%#<a class="dropdown-item" href="<%= url %> <%#"><%= title %></a>
+            <%# <% end %> 
           </div>
         </li>
       </ul>
