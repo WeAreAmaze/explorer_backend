@@ -12,8 +12,8 @@ defmodule BlockScoutWeb.Chain.MarketHistoryChartController do
 
       market_history_data =
         case recent_market_history do
-          [today | the_rest] ->
-            encode_market_history_data([%{today | closing_price: exchange_rate.usd_value} | the_rest])
+          [the_rest] ->
+            encode_market_history_data([%{closing_price: exchange_rate.usd_value} | the_rest])
 
           data ->
             encode_market_history_data(data)
