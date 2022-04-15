@@ -34,11 +34,11 @@ defmodule BlockScoutWeb.LayoutView do
     },
     %{
       title: "Metachain Mainnet",
-      url: "http://198.200.30.37:4000"
+      url: "http://testnet.amazechain.com:4000"
     },
     %{
       title: "Metachain Testnet",
-      url: "http://198.200.30.37:4000",
+      url: "http://testnet.amazechain.com:4000",
       test_net?: true
     }
   ]
