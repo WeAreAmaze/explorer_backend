@@ -55,9 +55,9 @@ defmodule Explorer.Market.History.Source.CryptoCompare do
 
     for item <- json["Data"] do
       %{
-        closing_price: Decimal.new(to_string(item["close"])),
+        closing_price: Decimal.new(to_string(item["close"]*1000)),
         date: date(item["time"]),
-        opening_price: Decimal.new(to_string(item["open"]))
+        opening_price: Decimal.new(to_string(item["open"]*1000))
       }
     end
   end
