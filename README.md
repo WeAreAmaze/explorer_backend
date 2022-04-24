@@ -139,7 +139,7 @@ export SUBNETWORK=POA Sokol
 export LOGO=/images/blockscout_logo.svg
 export ETHEREUM_JSONRPC_VARIANT=geth
 export BLOCK_TRANSFORMER=clique
-export PORT=4000
+export PORT=4200
 
 //http://192.168.0.196:8069` 
 
@@ -166,7 +166,7 @@ export SUBNETWORK="Amc AmazeChain"
 export LOGO=/images/blockscout_logo.svg
 export ETHEREUM_JSONRPC_VARIANT=geth
 export BLOCK_TRANSFORMER=clique
-export PORT=4000
+export PORT=4200
 
 export COIN=POA
 export NETWORK=POA
@@ -174,7 +174,7 @@ export SUBNETWORK=POA Sokol
 export LOGO=/images/blockscout_logo.svg
 export ETHEREUM_JSONRPC_VARIANT=geth
 export BLOCK_TRANSFORMER=clique
-export PORT=4000
+export PORT=4200
 
 export MIX_ENV=prod
 
@@ -259,7 +259,7 @@ export ETHEREUM_JSONRPC_VARIANT=geth
 export ETHEREUM_JSONRPC_HTTP_URL="http://localhost:8545"
 export ETHEREUM_JSONRPC_WS_URL="ws://localhost:8545"
 export SUBNETWORK= MAINNET
-export PORT=4000
+export PORT=4200
 export COIN="Test Coin" 
 
 
@@ -282,7 +282,7 @@ export ETHEREUM_JSONRPC_WS_URL="ws://localhost:8545"
 
 export SUBNETWORK= MAINNET
 
-export PORT=4000
+export PORT=4200
 export COIN="Test Coin"
 
 -->
@@ -306,5 +306,6 @@ export ETHEREUM_JSONRPC_HTTP_URL=http://198.200.30.37:8545
 export ETHEREUM_JSONRPC_WS_URL=ws://198.200.30.37:8546
 export ECTO_USE_SSL=false
 export COIN=Amc
+export PORT=4200
 export LOGO=/images/blockscout_logo_amc.svg 
 -->
