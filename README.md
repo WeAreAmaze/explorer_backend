@@ -308,4 +308,5 @@ export ECTO_USE_SSL=false
 export COIN=Amc
 export PORT=4200
 export LOGO=/images/blockscout_logo_amc.svg 
+export BLOCKSCOUT_VERSION=3.0
 -->
