@@ -3,6 +3,7 @@ defmodule Explorer.Market.MarketHistoryCache do
   Caches recent market history.
   """
 
+  require Logger
   import Ecto.Query, only: [from: 2]
 
   alias Explorer.Market.MarketHistory
@@ -42,8 +43,10 @@ defmodule Explorer.Market.MarketHistoryCache do
   end
 
   defp update_cache do
+    Logger.info("====update_cache=======")
     new_data = fetch_from_db()
 
+    Logger.info("new_data====new_data====new_data===: #{inspect(new_data)}")
     put_into_cache(@last_update_key, current_time())
     put_into_cache(@history_key, new_data)
 
@@ -64,6 +67,7 @@ defmodule Explorer.Market.MarketHistoryCache do
   end
 
   defp fetch_from_cache(key) do
+    Logger.info("====fetch_from_cache======")
     ConCache.get(@cache_name, key)
   end
 
