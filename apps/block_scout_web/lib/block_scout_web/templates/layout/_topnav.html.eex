@@ -76,8 +76,8 @@
                     ) %>
                 <%= link(
                       gettext("Bridged from MetaChain"),
-                      class: "dropdown-item #{tab_status("bridged-tokens/mtc", @conn.request_path)}",
-                      to: bridged_tokens_path(@conn, :show, :mtc),
+                      class: "dropdown-item #{tab_status("bridged-tokens/amc", @conn.request_path)}",
+                      to: bridged_tokens_path(@conn, :show, :amc),
                       style: "white-space: nowrap;"
                     ) %>
                 <%= link(
@@ -86,7 +86,7 @@
                       to: bridged_tokens_path(@conn, :show, :bsc)
                     ) %>
                 <%= link(
-                      gettext("Mtc"),
+                      gettext("Amc"),
                       class: "dropdown-item #{tab_status("accounts", @conn.request_path)}",
                       to: address_path(@conn, :index)
                     ) %>
@@ -107,7 +107,7 @@
                       to: tokens_path(@conn, :index)
                     ) %>
                 <%= link(
-                      gettext("Mtc"),
+                      gettext("Amc"),
                       class: "dropdown-item #{tab_status("accounts", @conn.request_path)}",
                       to: address_path(@conn, :index)
                     ) %>
@@ -135,7 +135,7 @@
                     to: api_url() <> api_docs_path(@conn, :index)
                   ) %>
               <%# <%= link(
-                    gettext("MTC RPC"),
+                    gettext("AMC RPC"),
                     class: "dropdown-item #{tab_status("eth-rpc-api-docs", @conn.request_path)}",
                     to: api_url() <> api_docs_path(@conn, :eth_rpc)
                   ) %> 

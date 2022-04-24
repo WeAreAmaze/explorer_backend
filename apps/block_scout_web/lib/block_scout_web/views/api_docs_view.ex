@@ -84,6 +84,6 @@ defmodule BlockScoutWeb.APIDocsView do
 
     set_path
     |> blockscout_url(is_api)
-    |> Path.join("api/mtc-rpc")
+    |> Path.join("api/amc-rpc")
   end
 end

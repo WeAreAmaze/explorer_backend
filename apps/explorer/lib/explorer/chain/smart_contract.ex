@@ -130,9 +130,9 @@ defmodule Explorer.Chain.SmartContract do
   @typedoc """
   * `"pure"` - [specified to not read blockchain state](https://solidity.readthedocs.io/en/develop/contracts.html#pure-functions).
   * `"view"` - [specified to not modify the blockchain state](https://solidity.readthedocs.io/en/develop/contracts.html#view-functions).
-  * `"nonpayable"` - function does not accept Mtc.
-    **NOTE**: Sending non-zero Mtc to non-payable function will revert the transaction.
-  * `"payable"` - function accepts Mtc.
+  * `"nonpayable"` - function does not accept Amc.
+    **NOTE**: Sending non-zero Amc to non-payable function will revert the transaction.
+  * `"payable"` - function accepts Amc.
   """
   @type state_mutability :: String.t()
 

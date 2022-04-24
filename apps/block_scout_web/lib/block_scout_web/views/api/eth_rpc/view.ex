@@ -1,6 +1,6 @@
 defmodule BlockScoutWeb.API.EthRPC.View do
   @moduledoc """
-  Views for /mtc-rpc API endpoints
+  Views for /amc-rpc API endpoints
   """
   use BlockScoutWeb, :view
 

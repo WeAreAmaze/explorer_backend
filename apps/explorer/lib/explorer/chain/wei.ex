@@ -1,6 +1,6 @@
 defmodule Explorer.Chain.Wei do
   @moduledoc """
-  The smallest fractional unit of Mtc. Using wei instead of ether allows code to do integer match instead of using
+  The smallest fractional unit of Amc. Using wei instead of ether allows code to do integer match instead of using
   floats.
 
   All values represented by the `Wei` struct are assumed to measured in the base unit of wei.
@@ -86,7 +86,7 @@ defmodule Explorer.Chain.Wei do
   end
 
   @typedoc """
-  Mtc is the default unit Ethereum and its side chains are measured in when displaying values to humans.
+  Amc is the default unit Ethereum and its side chains are measured in when displaying values to humans.
 
   10<sup>18</sup> wei is 1 ether.
   """
@@ -105,7 +105,7 @@ defmodule Explorer.Chain.Wei do
   @type unit :: :wei | :gwei | :ether
 
   @typedoc """
-  The smallest fractional unit of Mtc.
+  The smallest fractional unit of Amc.
   """
   @type wei :: Decimal.t()
 
