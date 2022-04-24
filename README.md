@@ -306,5 +306,5 @@ export ETHEREUM_JSONRPC_HTTP_URL=http://198.200.30.37:8545
 export ETHEREUM_JSONRPC_WS_URL=ws://198.200.30.37:8546
 export ECTO_USE_SSL=false
 export COIN=Amc
-export LOGO=/images/blockscout_logo.svg 
+export LOGO=/images/blockscout_logo_amc.svg 
 -->
