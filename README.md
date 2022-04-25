@@ -298,7 +298,7 @@ update
 ->
 
 <!-- 
-export NETWORK="Amc AmazeChain"
+export NETWORK="AMC AmazeChain"
 export SUBNETWORK=AmazeChain Explorer
 export ETHEREUM_JSONRPC_VARIANT=geth
 export BLOCK_TRANSFORMER=clique
