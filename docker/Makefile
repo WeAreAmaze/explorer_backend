@@ -1,9 +1,9 @@
 SYSTEM := $(shell uname -s)
 HOST := host.docker.internal
-DOCKER_REPO := blockscoutAmc
-APP_NAME := blockscoutAmc
+DOCKER_REPO := blockscout_amc
+APP_NAME := blockscout_amc
 BS_CONTAINER_IMAGE := $(DOCKER_REPO)/$(APP_NAME)
-BS_CONTAINER_NAME := blockscoutAmc
+BS_CONTAINER_NAME := blockscout_amc
 PG_CONTAINER_IMAGE := postgres:13.6
 PG_CONTAINER_NAME := db
 THIS_FILE = $(lastword $(MAKEFILE_LIST))
