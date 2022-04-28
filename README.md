@@ -305,8 +305,9 @@ export BLOCK_TRANSFORMER=clique
 export ETHEREUM_JSONRPC_HTTP_URL=http://198.200.30.37:8545
 export ETHEREUM_JSONRPC_WS_URL=ws://198.200.30.37:8546
 export ECTO_USE_SSL=false
-export COIN=Amc
-export PORT=4200
+export COIN=EOS
+export PORT=4000
 export LOGO=/images/blockscout_logo_amc.svg 
 export BLOCKSCOUT_VERSION=3.0
+export COIN_AMC=AMC
 -->
