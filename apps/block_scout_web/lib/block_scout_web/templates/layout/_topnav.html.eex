@@ -75,7 +75,7 @@
                       to: tokens_path(@conn, :index)
                     ) %>
                 <%= link(
-                      gettext("Bridged from MetaChain"),
+                      gettext("Bridged from AmazeChain"),
                       class: "dropdown-item #{tab_status("bridged-tokens/amc", @conn.request_path)}",
                       to: bridged_tokens_path(@conn, :show, :amc),
                       style: "white-space: nowrap;"
@@ -124,7 +124,7 @@
               <%= gettext("APIs") %>
             </a>
             <div class="dropdown-menu" aria-labeledby="navbarTransactionsDropdown"> 
-              <%# <%= link(
+            <%# <%= link(
                     gettext("GraphQL"),
                     class: "dropdown-item #{tab_status("graphiql", @conn.request_path)}",
                     to: api_url() <> "/graphiql"
@@ -134,6 +134,12 @@
                     class: "dropdown-item #{tab_status("api-docs", @conn.request_path)}",
                     to: api_url() <> api_docs_path(@conn, :index)
                   ) %>
+            <%# <%= link(
+                    gettext("RPCTest"),
+                    class: "dropdown-item #{tab_status("api-docs-test", @conn.request_path)}",
+                    to: api_url() <> api_docs_path(@conn, :api_docs_test)
+                  ) %>
+
               <%# <%= link(
                     gettext("AMC RPC"),
                     class: "dropdown-item #{tab_status("eth-rpc-api-docs", @conn.request_path)}",

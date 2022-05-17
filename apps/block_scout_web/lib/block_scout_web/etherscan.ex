@@ -1267,7 +1267,7 @@ defmodule BlockScoutWeb.Etherscan do
   @account_eth_get_balance_action %{
     name: "mtc_get_balance",
     description:
-      "Mimics MetaChain JSON RPC's mtc_getBalance. Returns the balance as of the provided block (defaults to latest)",
+      "Mimics AmazeChain JSON RPC's mtc_getBalance. Returns the balance as of the provided block (defaults to latest)",
     required_params: [
       %{
         key: "address",
@@ -2279,7 +2279,7 @@ defmodule BlockScoutWeb.Etherscan do
 
   @block_eth_block_number_action %{
     name: "mtc_block_number",
-    description: "Mimics MetaChain JSON RPC's mtc_blockNumber. Returns the lastest block number",
+    description: "Mimics AmazeChain JSON RPC's mtc_blockNumber. Returns the lastest block number",
     required_params: [],
     optional_params: [
       %{
@@ -2726,7 +2726,7 @@ defmodule BlockScoutWeb.Etherscan do
   @contract_verifysourcecode_action %{
     name: "verifysourcecode",
     description: """
-    Verify a contract with Standard input JSON file. Its interface the same as <a href="https://docs.etherscan.io/tutorials/verifying-contracts-programmatically">MTC</a>'s API endpoint
+    Verify a contract with Standard input JSON file. Its interface the same as <a href="https://docs.etherscan.io/tutorials/verifying-contracts-programmatically">AMC</a>'s API endpoint
     <br/>
     <br/>
     """,

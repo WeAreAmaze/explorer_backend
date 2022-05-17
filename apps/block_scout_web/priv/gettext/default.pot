@@ -437,12 +437,12 @@ msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/templates/layout/_footer.html.eex:22
-msgid "Blockscout is a tool for inspecting and analyzing EVM based blockchains. Blockchain explorer for MetaChain Networks."
+msgid "Blockscout is a tool for inspecting and analyzing EVM based blockchains. Blockchain explorer for AmazeChain Networks."
 msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/templates/stakes/_stakes_top.html.eex:45
-msgid "Bridge STAKE to MetaChain"
+msgid "Bridge STAKE to AmazeChain"
 msgstr ""
 
 #, elixir-format
@@ -457,7 +457,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/block_scout_web/templates/layout/_topnav.html.eex:78
-msgid "Bridged from MetaChain"
+msgid "Bridged from AmazeChain"
 msgstr ""
 
 #, elixir-format
