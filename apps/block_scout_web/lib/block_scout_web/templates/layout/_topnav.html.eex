@@ -134,8 +134,8 @@
                     class: "dropdown-item #{tab_status("api-docs", @conn.request_path)}",
                     to: api_url() <> api_docs_path(@conn, :index)
                   ) %>
-            <%# <%= link(
-                    gettext("RPCTest"),
+              <%= link(
+                    gettext("RPC TestNet"),
                     class: "dropdown-item #{tab_status("api-docs-test", @conn.request_path)}",
                     to: api_url() <> api_docs_path(@conn, :api_docs_test)
                   ) %>

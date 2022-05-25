@@ -3,6 +3,7 @@ defmodule BlockScoutWeb.APIDocsController do
 
   alias BlockScoutWeb.Etherscan
   alias Explorer.EthRPC
+  alias Explorer.RPCTest
 
   def index(conn, _params) do
     conn
@@ -18,7 +19,7 @@ defmodule BlockScoutWeb.APIDocsController do
 
   def api_docs_test(conn, _params) do
     conn
-    |> assign(:documentation, EthRPC.methods())
+    |> assign(:documentation, RPCTest.methods())
     |> render("api_docs_test.html")
   end
 end
