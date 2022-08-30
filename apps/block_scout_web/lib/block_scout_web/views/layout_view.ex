@@ -34,11 +34,11 @@ defmodule BlockScoutWeb.LayoutView do
     },
     %{
       title: "AmazeChain Mainnet",
-      url: "http://testnet.amazechain.com:4200"
+      url: "http://174.129.114.74:4000"
     },
     %{
       title: "AmazeChain Testnet",
-      url: "http://testnet.amazechain.com:4200",
+      url: "http://174.129.114.74:4000",
       test_net?: true
     }
   ]
