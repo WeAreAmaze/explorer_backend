@@ -50,6 +50,8 @@ RUN cd apps/block_scout_web/assets/ && \
     npm run deploy && \
     cd -
 
+RUN echo http://mirrors.aliyun.com/alpine/v3.14/main/ > /etc/apk/repositories && echo http://mirrors.aliyun.com/alpine/v3.14/community/ >> /etc/apk/repositories
+
 RUN cd apps/explorer/ && \
     npm install && \
     apk update && apk del --force-broken-world alpine-sdk gmp-dev automake libtool inotify-tools autoconf python3
