@@ -76,8 +76,8 @@
                     ) %>
                 <%= link(
                       gettext("Bridged from AmazeChain"),
-                      class: "dropdown-item #{tab_status("bridged-tokens/amc", @conn.request_path)}",
-                      to: bridged_tokens_path(@conn, :show, :amc),
+                      class: "dropdown-item #{tab_status("bridged-tokens/eth", @conn.request_path)}",
+                      to: bridged_tokens_path(@conn, :show, :eth),
                       style: "white-space: nowrap;"
                     ) %>
                 <%= link(

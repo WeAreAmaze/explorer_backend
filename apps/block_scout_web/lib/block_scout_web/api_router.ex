@@ -27,7 +27,7 @@ defmodule BlockScoutWeb.ApiRouter do
 
     if Application.get_env(:block_scout_web, __MODULE__)[:reading_enabled] do
       get("/supply", V1.SupplyController, :supply)
-      post("/amc-rpc", EthRPC.EthController, :eth_request)
+      post("/eth-rpc", EthRPC.EthController, :eth_request)
     end
 
     if Application.get_env(:block_scout_web, __MODULE__)[:writing_enabled] do
@@ -54,7 +54,7 @@ defmodule BlockScoutWeb.ApiRouter do
     alias BlockScoutWeb.API.{EthRPC, RPC}
 
     if Application.get_env(:block_scout_web, __MODULE__)[:reading_enabled] do
-      post("/amc-rpc", EthRPC.EthController, :eth_request)
+      post("/eth-rpc", EthRPC.EthController, :eth_request)
 
       forward("/", RPCTranslatorForwarder, %{
         "block" => {RPC.BlockController, []},

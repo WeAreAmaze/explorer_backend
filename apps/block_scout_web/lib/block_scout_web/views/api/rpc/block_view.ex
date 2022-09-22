@@ -32,7 +32,7 @@ defmodule BlockScoutWeb.API.RPC.BlockView do
     RPCView.render("show.json", data: data)
   end
 
-  def render("mtc_block_number.json", %{number: number, id: id}) do
+  def render("eth_block_number.json", %{number: number, id: id}) do
     result = EthRPC.encode_quantity(number)
 
     EthRPCView.render("show.json", %{result: result, id: id})

@@ -21,12 +21,12 @@ defmodule BlockScoutWeb.API.RPC.AddressController do
     |> render(:listaccounts, %{accounts: accounts})
   end
 
-  def mtc_get_balance(conn, params) do
+  def eth_get_balance(conn, params) do
     with {:address_param, {:ok, address_param}} <- fetch_address(params),
          {:block_param, {:ok, block}} <- {:block_param, fetch_block_param(params)},
          {:format, {:ok, address_hash}} <- to_address_hash(address_param),
          {:balance, {:ok, balance}} <- {:balance, Blocks.get_balance_as_of_block(address_hash, block)} do
-      render(conn, :mtc_get_balance, %{balance: Wei.hex_format(balance)})
+      render(conn, :eth_get_balance, %{balance: Wei.hex_format(balance)})
     else
       {:address_param, :error} ->
         conn

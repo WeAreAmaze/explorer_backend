@@ -437,7 +437,7 @@ defmodule BlockScoutWeb.AddressView do
   def is_omni_bridge?(address_hash) do
     address_hash_str = "0x" <> Base.encode16(address_hash.bytes, case: :lower)
 
-    address_hash_str == String.downcase(System.get_env("MTC_OMNI_BRIDGE_MEDIATOR", "")) ||
+    address_hash_str == String.downcase(System.get_env("ETH_OMNI_BRIDGE_MEDIATOR", "")) ||
       address_hash_str == String.downcase(System.get_env("BSC_OMNI_BRIDGE_MEDIATOR", ""))
   end
 

@@ -127,7 +127,7 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
       expect(EthereumJSONRPC.Mox, :json_rpc, 1, fn [
                                                      %{
                                                        id: 0,
-                                                       method: "amc_getBlockByNumber",
+                                                       method: "eth_getBlockByNumber",
                                                        params: ["0x65", true]
                                                      }
                                                    ],
@@ -149,7 +149,7 @@ defmodule BlockScoutWeb.API.RPC.AddressControllerTest do
       expect(EthereumJSONRPC.Mox, :json_rpc, 1, fn [
                                                      %{
                                                        id: 0,
-                                                       method: "amc_getBlockByNumber",
+                                                       method: "eth_getBlockByNumber",
                                                        params: ["0x65", true]
                                                      }
                                                    ],

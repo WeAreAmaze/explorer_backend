@@ -49,7 +49,7 @@ defmodule BlockScoutWeb.Router do
       pipe_through(:browser)
       get("/api-docs", PageNotFoundController, :index)
       get("/api-docs-test", PageNotFoundController, :index)
-      get("/amc-rpc-api-docs", PageNotFoundController, :index)
+      get("/eth-rpc-api-docs", PageNotFoundController, :index)
     end
   end
 
@@ -58,7 +58,7 @@ defmodule BlockScoutWeb.Router do
 
     get("/api-docs", APIDocsController, :index)
     get("/api-docs-test", APIDocsController, :api_docs_test)
-    get("/amc-rpc-api-docs", APIDocsController, :eth_rpc)
+    get("/eth-rpc-api-docs", APIDocsController, :eth_rpc)
   end
 
   url_params = Application.get_env(:block_scout_web, BlockScoutWeb.Endpoint)[:url]

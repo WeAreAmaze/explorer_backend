@@ -551,7 +551,7 @@ defmodule Explorer.Staking.ContractState do
     json_rpc_named_arguments = Application.get_env(:explorer, :json_rpc_named_arguments)
 
     result =
-      %{id: 0, method: "amc_blockNumber", params: []}
+      %{id: 0, method: "eth_blockNumber", params: []}
       |> EthereumJSONRPC.request()
       |> EthereumJSONRPC.json_rpc(json_rpc_named_arguments)
 

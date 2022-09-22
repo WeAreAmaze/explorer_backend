@@ -10,25 +10,25 @@ defmodule Explorer.EthRPC do
   alias Explorer.Etherscan.{Blocks, Logs, RPC}
 
   @methods %{
-    "amc_blockNumber" => %{
-      action: :amc_block_number,
+    "eth_blockNumber" => %{
+      action: :eth_block_number,
       notes: nil,
       example: """
-      {"id": 0, "jsonrpc": "2.0", "method": "amc_blockNumber", "params": []}
+      {"id": 0, "jsonrpc": "2.0", "method": "eth_blockNumber", "params": []}
       """,
       params: [],
       result: """
       {"id": 0, "jsonrpc": "2.0", "result": "0xb3415c"}
       """
     },
-    "amc_getBalance" => %{
-      action: :amc_get_balance,
+    "eth_getBalance" => %{
+      action: :eth_get_balance,
       notes: """
       The `earliest` parameter will not work as expected currently, because genesis block balances
       are not currently imported
       """,
       example: """
-      {"id": 0, "jsonrpc": "2.0", "method": "amc_getBalance", "params": ["0x0000000000000000000000000000000000000007", "latest"]}
+      {"id": 0, "jsonrpc": "2.0", "method": "eth_getBalance", "params": ["0x0000000000000000000000000000000000000007", "latest"]}
       """,
       params: [
         %{
@@ -50,14 +50,14 @@ defmodule Explorer.EthRPC do
       {"id": 0, "jsonrpc": "2.0", "result": "0x0234c8a3397aab58"}
       """
     },
-    "amc_getLogs" => %{
+    "eth_getLogs" => %{
       action: :eth_get_logs,
       notes: """
       Will never return more than 1000 log entries.\n
       For this reason, you can use pagination options to request the next page. Pagination options params: {"logIndex": "3D", "blockNumber": "6423AC", "transactionIndex": 53} which include parameters from the last log received from the previous request. These three parameters are required for pagination.
       """,
       example: """
-      {"id": 0, "jsonrpc": "2.0", "method": "amc_getLogs",
+      {"id": 0, "jsonrpc": "2.0", "method": "eth_getLogs",
        "params": [
         {"address": "0xc78Be425090Dbd437532594D12267C5934Cc6c6f",
          "paging_options": {"logIndex": "3D", "blockNumber": "6423AC", "transactionIndex": 53},
@@ -106,7 +106,7 @@ defmodule Explorer.EthRPC do
     end)
   end
 
-  def amc_block_number do
+  def eth_block_number do
     max_block_number = BlockNumber.get_max()
 
     max_block_number_hex =
@@ -116,7 +116,7 @@ defmodule Explorer.EthRPC do
     {:ok, max_block_number_hex}
   end
 
-  def amc_get_balance(address_param, block_param \\ nil) do
+  def eth_get_balance(address_param, block_param \\ nil) do
     with {:address, {:ok, address}} <- {:address, Chain.string_to_address_hash(address_param)},
          {:block, {:ok, block}} <- {:block, block_param(block_param)},
          {:balance, {:ok, balance}} <- {:balance, Blocks.get_balance_as_of_block(address, block)} do
