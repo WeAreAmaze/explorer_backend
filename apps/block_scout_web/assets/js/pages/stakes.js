@@ -365,9 +365,9 @@ function accountChanged (account, state) {
 async function getAccounts () {
   let accounts = []
   try {
-    accounts = await window.ethereum.request({ method: 'mtc_accounts' })
+    accounts = await window.ethereum.request({ method: 'eth_accounts' })
   } catch (e) {
-    console.error(`mtc_accounts request failed. ${constants.METAMASK_VERSION_WARNING}`)
+    console.error(`eth_accounts request failed. ${constants.METAMASK_VERSION_WARNING}`)
     openErrorModal('Get account', `Cannot get your account address. ${constants.METAMASK_VERSION_WARNING}`)
   }
   return accounts
@@ -379,7 +379,7 @@ async function getNetId (web3) {
   } else {
     let netId = window.ethereum.chainId
     if (!netId) {
-      netId = await window.ethereum.request({ method: 'mtc_chainId' })
+      netId = await window.ethereum.request({ method: 'eth_chainId' })
     }
     if (!netId) {
       const msg = `Cannot get chainId. ${constants.METAMASK_VERSION_WARNING}`

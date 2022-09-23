@@ -2,7 +2,7 @@ import 'bootstrap'
 
 export async function addChainToMM ({ btn }) {
   try {
-    const chainID = await window.ethereum.request({ method: 'mtc_chainId' })
+    const chainID = await window.ethereum.request({ method: 'eth_chainId' })
     const chainIDFromEnvVar = parseInt(process.env.CHAIN_ID)
     const chainIDHex = chainIDFromEnvVar && `0x${chainIDFromEnvVar.toString(16)}`
     const blockscoutURL = location.protocol + '//' + location.host + process.env.NETWORK_PATH
