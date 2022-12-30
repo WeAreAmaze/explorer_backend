@@ -1,6 +1,13 @@
 FROM bitwalker/alpine-elixir-phoenix:1.12
 
+RUN echo http://mirrors.aliyun.com/alpine/v3.14/main/ > /etc/apk/repositories && echo http://mirrors.aliyun.com/alpine/v3.14/community/ >> /etc/apk/repositories
+RUN export HEX_MIRROR="https://hexpm.upyun.com"
+RUN export HEX_CDN="https://hexpm.upyun.com"
+RUN mix hex.config mirror_url https://hexpm.upyun.com
+RUN npm config set registry https://registry.npm.taobao.org
+
 RUN apk --no-cache --update add alpine-sdk gmp-dev automake libtool inotify-tools autoconf python3 file
+
 
 ENV GLIBC_REPO=https://github.com/sgerrand/alpine-pkg-glibc
 ENV GLIBC_VERSION=2.30-r0
@@ -50,7 +57,7 @@ RUN cd apps/block_scout_web/assets/ && \
     npm run deploy && \
     cd -
 
-RUN echo http://mirrors.aliyun.com/alpine/v3.14/main/ > /etc/apk/repositories && echo http://mirrors.aliyun.com/alpine/v3.14/community/ >> /etc/apk/repositories
+
 
 RUN cd apps/explorer/ && \
     npm install && \

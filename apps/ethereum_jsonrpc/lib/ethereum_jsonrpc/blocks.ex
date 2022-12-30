@@ -5,6 +5,7 @@ defmodule EthereumJSONRPC.Blocks do
   """
 
   alias EthereumJSONRPC.{Block, Transactions, Transport, Uncles}
+  alias EthereumJSONRPC.Amazechain.Verifiers
 
   @type elixir :: [Block.elixir()]
   @type params :: [Block.params()]
@@ -12,12 +13,14 @@ defmodule EthereumJSONRPC.Blocks do
           blocks_params: [map()],
           block_second_degree_relations_params: [map()],
           transactions_params: [map()],
+          verifiers_params: [map()],
           errors: [Transport.error()]
         }
 
   defstruct blocks_params: [],
             block_second_degree_relations_params: [],
             transactions_params: [],
+            verifiers_params: [],
             errors: []
 
   def requests(id_to_params, request) when is_map(id_to_params) and is_function(request, 1) do
@@ -50,11 +53,15 @@ defmodule EthereumJSONRPC.Blocks do
     transactions_params = Transactions.elixir_to_params(elixir_transactions)
     blocks_params = elixir_to_params(elixir_blocks)
 
+    elixir_verifiers = elixir_to_verifiers(elixir_blocks)
+    verifiers_params = Verifiers.elixir_to_params(elixir_verifiers)
+
     %__MODULE__{
       errors: errors,
       blocks_params: blocks_params,
       block_second_degree_relations_params: block_second_degree_relations_params,
-      transactions_params: transactions_params
+      transactions_params: transactions_params,
+      verifiers_params: verifiers_params
     }
   end
 
@@ -202,6 +209,11 @@ defmodule EthereumJSONRPC.Blocks do
   @spec elixir_to_transactions(elixir) :: Transactions.elixir()
   def elixir_to_transactions(elixir) when is_list(elixir) do
     Enum.flat_map(elixir, &Block.elixir_to_transactions/1)
+  end
+
+  @spec elixir_to_verifiers(elixir) :: Verifiers.elixir()
+  def elixir_to_verifiers(elixir) when is_list(elixir) do
+    Enum.flat_map(elixir, &Block.elixir_to_verifiers/1)
   end
 
   @doc """
