@@ -8,6 +8,7 @@ defmodule EthereumJSONRPC.Block do
 
   alias EthereumJSONRPC.{Transactions, Uncles}
   alias EthereumJSONRPC.Amazechain.Verifiers
+  alias EthereumJSONRPC.Amazechain.Rewards
 
   @type elixir :: %{String.t() => non_neg_integer | DateTime.t() | String.t() | nil}
   @type params :: %{
@@ -462,6 +463,11 @@ defmodule EthereumJSONRPC.Block do
   def elixir_to_verifiers(%{"verifiers" => verifiers}), do: verifiers
 
   def elixir_to_verifiers(_), do: []
+
+  @spec elixir_to_rewards(elixir) :: Rewards.elixir()
+  def elixir_to_rewards(%{"rewards" => rewards}), do: rewards
+
+  def elixir_to_rewards(_), do: []
   @doc """
   Get `t:EthereumJSONRPC.Uncles.elixir/0` from `t:elixir/0`.
 
@@ -606,6 +612,10 @@ defmodule EthereumJSONRPC.Block do
 
   defp entry_to_elixir({"verifier" = key, verifiers}) do
     {key, Verifiers.to_elixir(verifiers)}
+  end
+
+  defp entry_to_elixir({"rewards" = key, rewards}) do
+    {key, Rewards.to_elixir(rewards)}
   end
 
   # Arbitrum fields
