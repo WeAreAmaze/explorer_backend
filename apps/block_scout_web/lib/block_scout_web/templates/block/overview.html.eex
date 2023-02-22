@@ -197,6 +197,25 @@
               </dt>
               <dd class="col-sm-9 col-lg-10"><%= to_string(@block.nonce) %></dd>
             </dl>
+            <!-- Minner -->
+            <dl class="row">
+              <dt class="col-sm-3 col-lg-2 text-muted">
+                <%= render BlockScoutWeb.CommonComponentsView, "_i_tooltip_2.html",
+                text: gettext("64-bit hash of value verifying proof-of-work (note: null for POA chains).") %>
+                <%= gettext("Miner Reward") %>
+              </dt>
+              <dd class="col-sm-9 col-lg-10"><%= to_string(@block.nonce) %></dd>
+            </dl>
+
+            <!-- Sigin -->
+            <dl class="row">
+              <dt class="col-sm-3 col-lg-2 text-muted">
+                <%= render BlockScoutWeb.CommonComponentsView, "_i_tooltip_2.html",
+                text: gettext("64-bit hash of value verifying proof-of-work (note: null for POA chains).") %>
+                <%= gettext("Chore Reward") %>
+              </dt>
+              <dd class="col-sm-9 col-lg-10"><%= to_string(@block.nonce) %></dd>
+            </dl>
           <% end %>
           <%= if !is_nil(@block.base_fee_per_gas) do%>
             <!-- Base Fee per Gas -->

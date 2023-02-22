@@ -401,6 +401,8 @@ defmodule BlockScoutWeb.WebRouter do
 
     get("/csv-export", CsvExportController, :index)
 
+    get("/csv-reward-export", CsvRewardExportController, :index)
+
     post("/captcha", CaptchaController, :index)
 
     get("/transactions-csv", AddressTransactionController, :transactions_csv)
