@@ -197,24 +197,15 @@
               </dt>
               <dd class="col-sm-9 col-lg-10"><%= to_string(@block.nonce) %></dd>
             </dl>
-            <!-- Minner -->
+             <hr>
+            <!-- Minner Reward -->
             <dl class="row">
               <dt class="col-sm-3 col-lg-2 text-muted">
                 <%= render BlockScoutWeb.CommonComponentsView, "_i_tooltip_2.html",
-                text: gettext("64-bit hash of value verifying proof-of-work (note: null for POA chains).") %>
+                text: gettext("Amount of distributed reward. Miners receive a static block reward + Tx fees + uncle fees.") %>
                 <%= gettext("Miner Reward") %>
               </dt>
-              <dd class="col-sm-9 col-lg-10"><%= to_string(@block.nonce) %></dd>
-            </dl>
-
-            <!-- Sigin -->
-            <dl class="row">
-              <dt class="col-sm-3 col-lg-2 text-muted">
-                <%= render BlockScoutWeb.CommonComponentsView, "_i_tooltip_2.html",
-                text: gettext("64-bit hash of value verifying proof-of-work (note: null for POA chains).") %>
-                <%= gettext("Chore Reward") %>
-              </dt>
-              <dd class="col-sm-9 col-lg-10"><%= to_string(@block.nonce) %></dd>
+              <dd class="col-sm-9 col-lg-10"><%= @block.gas_used |> BlockScoutWeb.Cldr.Number.to_string! %> | <%= if Decimal.cmp(@block.gas_limit, 0) == :eq, do: "0%", else: ((Decimal.to_integer(@block.gas_used) / Decimal.to_integer(@block.gas_limit)) |> BlockScoutWeb.Cldr.Number.to_string!(format: "#.#%")) %></dd>
             </dl>
           <% end %>
           <%= if !is_nil(@block.base_fee_per_gas) do%>
@@ -245,7 +236,7 @@
                 </dt>
                 <dd class="col-sm-9 col-lg-10"><%= format_wei_value(%Wei{value: priority_fee}, :ether) %></dd>
             </dl>
-          <% end %>  
+          <% end %>
           <%= if show_reward?(@block.rewards) do %>
             <hr>
             <%= for block_reward <- @block.rewards do %>
@@ -282,10 +273,9 @@
               </dl>
             <% end %>
           <% end %>
-          <hr>
         </div>
       </div>
     </div>
 </section>
 
-<%= render BlockScoutWeb.Advertisement.BannersAdView, "_banner_728.html", conn: @conn %> 
+<%= render BlockScoutWeb.Advertisement.BannersAdView, "_banner_728.html", conn: @conn %>
