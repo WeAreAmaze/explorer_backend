@@ -471,7 +471,7 @@ defmodule BlockScoutWeb.TransactionView do
   end
 
   @doc """
-  Converts a transaction's Wei value to Amc and returns a formatted display value.
+  Converts a transaction's Wei value to Amt and returns a formatted display value.
 
   ## Options
 

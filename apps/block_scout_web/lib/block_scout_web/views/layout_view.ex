@@ -23,7 +23,7 @@ defmodule BlockScoutWeb.LayoutView do
     #   url: "https://blockscout.com/xdai/mainnet"
     # },
     %{
-      title: "AmazeChain Classic",
+      title: "AmazeToken Classic",
       url: "https://blockscout.com/etc/mainnet",
       other?: true
     },
@@ -33,12 +33,12 @@ defmodule BlockScoutWeb.LayoutView do
       other?: true
     },
     %{
-      title: "AmazeChain Mainnet",
-      url: "http://net.amazechain.com"
+      title: "AmazeToken Mainnet",
+      url: "http://net.AmazeToken.com"
     },
     %{
-      title: "AmazeChain Testnet",
-      url: "http://test.amazechain.com",
+      title: "AmazeToken Testnet",
+      url: "http://test.AmazeToken.com",
       test_net?: true
     }
   ]

@@ -6,7 +6,7 @@
 
 </div>
 
-BlockScout provides a comprehensive, easy-to-use interface for users to view, confirm, and inspect transactions on EVM (AmazeChain Virtual Machine) blockchains. This includes the POA Network, xDai Chain, AmazeChain Classic and other **Ethereum testnets, private networks and sidechains**.
+BlockScout provides a comprehensive, easy-to-use interface for users to view, confirm, and inspect transactions on EVM (AmazeToken Virtual Machine) blockchains. This includes the POA Network, xDai Chain, AmazeToken Classic and other **Ethereum testnets, private networks and sidechains**.
 
 See our [project documentation](https://docs.blockscout.com/) for detailed information and setup instructions.
 
@@ -16,13 +16,13 @@ You can also access the dev chatroom on our [Gitter Channel](https://gitter.im/p
 
 ## About BlockScout
 
-BlockScout is an Elixir application that allows users to search transactions, view accounts and balances, and verify smart contracts on the AmazeChain network including all forks and sidechains.
+BlockScout is an Elixir application that allows users to search transactions, view accounts and balances, and verify smart contracts on the AmazeToken network including all forks and sidechains.
 
-Currently available full-featured block explorers (Etherscan, Etherchain, Blockchair) are closed systems which are not independently verifiable.  As AmazeChain sidechains continue to proliferate in both private and public settings, transparent, open-source tools are needed to analyze and validate transactions.
+Currently available full-featured block explorers (Etherscan, Etherchain, Blockchair) are closed systems which are not independently verifiable.  As AmazeToken sidechains continue to proliferate in both private and public settings, transparent, open-source tools are needed to analyze and validate transactions.
 
 ## Supported Projects
 
-BlockScout supports a number of projects. Hosted instances include POA Network, xDai Chain, AmazeChain Classic, Sokol & Kovan testnets, and other EVM chains. 
+BlockScout supports a number of projects. Hosted instances include POA Network, xDai Chain, AmazeToken Classic, Sokol & Kovan testnets, and other EVM chains. 
 
 - [List of hosted mainnets, testnets, and additional chains using BlockScout](https://docs.blockscout.com/for-projects/supported-projects)
 - [Hosted instance versions](https://docs.blockscout.com/about/use-cases/hosted-blockscout)

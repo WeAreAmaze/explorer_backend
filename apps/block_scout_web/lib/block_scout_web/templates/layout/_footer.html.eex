@@ -19,8 +19,8 @@
 
     <div class="row">
       <div class="col-xs-12 col-lg-3">
-        <p class="footer-info-text"><%= gettext("Amazechain is a tool for inspecting and analyzing.") %></p>
-        <p class="footer-info-text"><%= gettext("AmazeChain.") %></p>
+        <p class="footer-info-text"><%= gettext("AmazeToken is a tool for inspecting and analyzing.") %></p>
+        <p class="footer-info-text"><%= gettext("AmazeToken.") %></p>
     </div>
     </div>
 

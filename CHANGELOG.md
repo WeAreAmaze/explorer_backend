@@ -1140,7 +1140,7 @@ fixed menu hovers in dark mode desktop view
 - [#2075](https://github.com/blockscout/blockscout/pull/2075) - add blocks cache
 - [#2151](https://github.com/blockscout/blockscout/pull/2151) - hide dropdown menu then other networks list is empty
 - [#2191](https://github.com/blockscout/blockscout/pull/2191) - allow to configure token metadata update interval
-- [#2146](https://github.com/blockscout/blockscout/pull/2146) - feat: add amc_getLogs rpc endpoint
+- [#2146](https://github.com/blockscout/blockscout/pull/2146) - feat: add amt_getLogs rpc endpoint
 - [#2216](https://github.com/blockscout/blockscout/pull/2216) - Improve token's controllers by avoiding unnecessary preloads
 - [#2235](https://github.com/blockscout/blockscout/pull/2235) - save and show additional validation fields to smart contract
 - [#2190](https://github.com/blockscout/blockscout/pull/2190) - show all token transfers
@@ -1148,7 +1148,7 @@ fixed menu hovers in dark mode desktop view
 - [#2266](https://github.com/blockscout/blockscout/pull/2266) - allow excluding uncles from average block time calculation
 
 ### Fixes
-- [#2290](https://github.com/blockscout/blockscout/pull/2290) - Add amc_get_balance.json to AddressView's render
+- [#2290](https://github.com/blockscout/blockscout/pull/2290) - Add amt_get_balance.json to AddressView's render
 - [#2286](https://github.com/blockscout/blockscout/pull/2286) - banner stats issues on sm resolutions, transactions title issue
 - [#2284](https://github.com/blockscout/blockscout/pull/2284) - add 404 status for not existing pages
 - [#2244](https://github.com/blockscout/blockscout/pull/2244) - fix internal transactions failing to be indexed because of constraint
@@ -1245,7 +1245,7 @@ fixed menu hovers in dark mode desktop view
 - [#2037](https://github.com/blockscout/blockscout/pull/2037) - add address logs search functionality
 - [#2012](https://github.com/blockscout/blockscout/pull/2012) - make all pages pagination async
 - [#2064](https://github.com/blockscout/blockscout/pull/2064) - feat: add fields to tx apis, small cleanups
-- [#2100](https://github.com/blockscout/blockscout/pull/2100) - feat: amc_get_balance rpc endpoint
+- [#2100](https://github.com/blockscout/blockscout/pull/2100) - feat: amt_get_balance rpc endpoint
 
 ### Fixes
 - [#2228](https://github.com/blockscout/blockscout/pull/2228) - favorites duplication issues, active radio issue

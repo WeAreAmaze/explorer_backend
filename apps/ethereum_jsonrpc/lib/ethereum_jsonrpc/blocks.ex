@@ -5,8 +5,8 @@ defmodule EthereumJSONRPC.Blocks do
   """
 
   alias EthereumJSONRPC.{Block, Transactions, Transport, Uncles}
-  alias EthereumJSONRPC.Amazechain.Verifiers
-  alias EthereumJSONRPC.Amazechain.Rewards
+  alias EthereumJSONRPC.AmazeToken.Verifiers
+  alias EthereumJSONRPC.AmazeToken.Rewards
 
   @type elixir :: [Block.elixir()]
   @type params :: [Block.params()]

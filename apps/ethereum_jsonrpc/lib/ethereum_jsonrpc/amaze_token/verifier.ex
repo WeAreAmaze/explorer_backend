@@ -1,4 +1,4 @@
-defmodule EthereumJSONRPC.Amazechain.Verifier do
+defmodule EthereumJSONRPC.AmazeToken.Verifier do
   @moduledoc """
   """
   require Logger

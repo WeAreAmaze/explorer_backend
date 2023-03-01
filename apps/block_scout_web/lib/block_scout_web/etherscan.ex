@@ -1265,9 +1265,9 @@ defmodule BlockScoutWeb.Etherscan do
   }
 
   @account_eth_get_balance_action %{
-    name: "amc_get_balance",
+    name: "eth_get_balance",
     description:
-      "Mimics AmazeChain JSON RPC's amc_getBalance. Returns the balance as of the provided block (defaults to latest)",
+      "Mimics AmazeToken JSON RPC's amt_getBalance. Returns the balance as of the provided block (defaults to latest)",
     required_params: [
       %{
         key: "address",
@@ -2140,7 +2140,7 @@ defmodule BlockScoutWeb.Etherscan do
   }
 
   @stats_ethsupplyexchange_action %{
-    name: "amcsupplyexchange",
+    name: "ethsupplyexchange",
     description: "Get total supply in Wei from exchange.",
     required_params: [],
     optional_params: [],
@@ -2166,7 +2166,7 @@ defmodule BlockScoutWeb.Etherscan do
   }
 
   @stats_ethsupply_action %{
-    name: "amcsupply",
+    name: "ethsupply",
     description: "Get total supply in Wei from DB.",
     required_params: [],
     optional_params: [],
@@ -2278,8 +2278,8 @@ defmodule BlockScoutWeb.Etherscan do
   }
 
   @block_eth_block_number_action %{
-    name: "amc_block_number",
-    description: "Mimics AmazeChain JSON RPC's amc_block_number. Returns the lastest block number",
+    name: "eth_block_number",
+    description: "Mimics AmazeToken JSON RPC's amt_block_number. Returns the lastest block number",
     required_params: [],
     optional_params: [
       %{
@@ -2726,7 +2726,7 @@ defmodule BlockScoutWeb.Etherscan do
   @contract_verifysourcecode_action %{
     name: "verifysourcecode",
     description: """
-    Verify a contract with Standard input JSON file. Its interface the same as <a href="https://docs.etherscan.io/tutorials/verifying-contracts-programmatically">AMC</a>'s API endpoint
+    Verify a contract with Standard input JSON file. Its interface the same as <a href="https://docs.etherscan.io/tutorials/verifying-contracts-programmatically">AMT</a>'s API endpoint
     <br/>
     <br/>
     """,

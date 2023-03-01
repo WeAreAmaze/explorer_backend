@@ -1,4 +1,4 @@
-defmodule EthereumJSONRPC.Amazechain.Reward do
+defmodule EthereumJSONRPC.AmazeToken.Reward do
   @moduledoc """
   """
   require Logger

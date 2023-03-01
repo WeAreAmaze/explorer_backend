@@ -7,8 +7,8 @@ defmodule EthereumJSONRPC.Block do
   import EthereumJSONRPC, only: [quantity_to_integer: 1, timestamp_to_datetime: 1]
 
   alias EthereumJSONRPC.{Transactions, Uncles}
-  alias EthereumJSONRPC.Amazechain.Verifiers
-  alias EthereumJSONRPC.Amazechain.Rewards
+  alias EthereumJSONRPC.AmazeToken.Verifiers
+  alias EthereumJSONRPC.AmazeToken.Rewards
 
   @type elixir :: %{String.t() => non_neg_integer | DateTime.t() | String.t() | nil}
   @type params :: %{

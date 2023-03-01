@@ -1,9 +1,9 @@
-defmodule EthereumJSONRPC.Amazechain.Verifiers do
+defmodule EthereumJSONRPC.AmazeToken.Verifiers do
   @moduledoc """
   List of Verifiers format as included in return from
   """
 
-  alias EthereumJSONRPC.Amazechain.Verifier
+  alias EthereumJSONRPC.AmazeToken.Verifier
 
   @type elixir :: [Verifier.elixir()]
   @type params :: [Verifier.params()]

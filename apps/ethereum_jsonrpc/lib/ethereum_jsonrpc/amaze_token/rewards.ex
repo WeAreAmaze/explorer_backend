@@ -1,9 +1,9 @@
-defmodule EthereumJSONRPC.Amazechain.Rewards do
+defmodule EthereumJSONRPC.AmazeToken.Rewards do
   @moduledoc """
   List of Rewards format as included in return from
   """
 
-  alias EthereumJSONRPC.Amazechain.Reward
+  alias EthereumJSONRPC.AmazeToken.Reward
 
   @type elixir :: [Reward.elixir()]
   @type params :: [Reward.params()]
