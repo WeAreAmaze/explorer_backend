@@ -12,6 +12,7 @@ defmodule BlockScoutWeb.ChainController do
   alias Explorer.ExchangeRates.Token
   alias Explorer.Market
   alias Phoenix.View
+  require  Logger
 
   def show(conn, _params) do
     transaction_estimated_count = Chain.transaction_estimated_count()
@@ -153,7 +154,7 @@ defmodule BlockScoutWeb.ChainController do
       blocks =
         [paging_options: %PagingOptions{page_size: 4}]
         |> Chain.list_blocks()
-        |> Repo.preload([[miner: :names], :transactions, :rewards])
+        |> Repo.preload([[miner: :names], :transactions, :rewards, :verifier])
         |> Enum.map(fn block ->
           %{
             chain_block_html:
@@ -165,7 +166,7 @@ defmodule BlockScoutWeb.ChainController do
             block_number: block.number
           }
         end)
-
+      #Logger.warn("-----222---:#{inspect(blocks)}")
       json(conn, %{blocks: blocks})
     else
       unprocessable_entity(conn)

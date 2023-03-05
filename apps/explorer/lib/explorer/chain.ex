@@ -29,8 +29,6 @@ defmodule Explorer.Chain do
   alias ABI.{TypeDecoder, TypeEncoder}
   alias Ecto.Adapters.SQL
   alias Ecto.{Changeset, Multi}
-  alias EthereumJSONRPC.AmazeToken.Verifiers, as: EthereumJSONRPCAmazeVerifiers
-  alias EthereumJSONRPC.AmazeToken.Rewards, as: EthereumJSONRPCAmazeRewards
   alias EthereumJSONRPC.Contract
   alias EthereumJSONRPC.Transaction, as: EthereumJSONRPCTransaction
 
@@ -65,7 +63,7 @@ defmodule Explorer.Chain do
     Wei
   }
 
-  alias Explorer.Chain.Block.{EmissionReward, Reward}
+  alias Explorer.Chain.Block.{Verifiers,EmissionReward, Reward}
 
   alias Explorer.Chain.Cache.{
     Accounts,
@@ -906,6 +904,17 @@ defmodule Explorer.Chain do
       )
 
     Repo.aggregate(query, :count, :hash)
+  end
+
+  @spec block_to_miner_verifier_count(Hash.Full.t()) :: non_neg_integer()
+  def block_to_miner_verifier_count(block_hash) do
+    query =
+      from(
+        verifiers in Verifiers,
+        where: verifiers.block_hash == ^block_hash
+      )
+
+    Repo.aggregate(query, :count, :block_hash)
   end
 
   @spec address_to_incoming_transaction_count(Hash.Address.t()) :: non_neg_integer()
