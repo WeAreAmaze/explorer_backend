@@ -192,7 +192,6 @@ defmodule Indexer.Block.Fetcher do
            ) do
       result = {:ok, %{inserted: inserted, errors: blocks_errors}}
      # Logger.info("2222222222--------#{inspect(inserted)}------")
-      #Logger.info("22444443434334434--------#{inspect(inserted[:block_rewards])}------")
      # Logger.warn("22444443434334434-------#{inspect(inserted[:verifiers_params1])}-------")
       update_block_cache(inserted[:blocks])
       update_transactions_cache(inserted[:transactions])
