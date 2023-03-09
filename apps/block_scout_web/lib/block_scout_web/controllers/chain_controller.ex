@@ -165,6 +165,7 @@ defmodule BlockScoutWeb.ChainController do
               ),
             block_number: block.number
           }
+        #Logger.warn("-1111-#{block.number}---nnnnn---:#{inspect(block)}")
         end)
       #Logger.warn("-----222---:#{inspect(blocks)}")
       json(conn, %{blocks: blocks})

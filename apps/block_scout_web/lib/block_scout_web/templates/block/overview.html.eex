@@ -198,24 +198,40 @@
               <dd class="col-sm-9 col-lg-10"><%= to_string(@block.nonce) %></dd>
             </dl>
              <hr>
-            <!-- Minner Reward -->
-            <dl class="row">
-              <dt class="col-sm-3 col-lg-2 text-muted">
-                <%= render BlockScoutWeb.CommonComponentsView, "_i_tooltip_2.html",
-                text: gettext("Amount of distributed reward. Miners receive a static block reward + Tx fees + uncle fees.") %>
-                <%= gettext("Miner Reward") %>
-              </dt>
-              <dd class="col-sm-9 col-lg-10"><%=  @block.miner_hash%></dd>
-            </dl>
-            <!-- Minner verifier -->
-            <dl class="row">
-              <dt class="col-sm-3 col-lg-2 text-muted">
-                <%= render BlockScoutWeb.CommonComponentsView, "_i_tooltip_2.html",
-                text: gettext("Amount of distributed reward. Miners receive a static block reward + Tx fees + uncle fees.") %>
-                <%= gettext("verifier") %>
-              </dt>
-              <dd class="col-sm-9 col-lg-10"><%= to_string(@block.nonce) %></dd>
-            </dl>
+              <!-- # of Transactions -->
+          <dl class="row">
+            <dt class="col-sm-3 col-lg-2 text-muted">
+              <%= render BlockScoutWeb.CommonComponentsView, "_i_tooltip_2.html",
+              text: gettext("The number of reward in the block.") %>
+              <%= gettext("Miner Rewards") %>
+            </dt>
+            <dd class="col-sm-9 col-lg-10">
+              <a href="#txs-reward" class="page-link bs-label large btn-no-border-link-to-tems">
+                <%= if @block_transaction_count == 1 do %>
+                  <%= gettext "%{count} Rewards", count: @block_transaction_count %>
+                <% else %>
+                  <%= gettext "%{count} Rewards", count: @block_transaction_count %>
+                <% end %>
+              </a>
+            </dd>
+          </dl>
+
+          <dl class="row">
+            <dt class="col-sm-3 col-lg-2 text-muted">
+              <%= render BlockScoutWeb.CommonComponentsView, "_i_tooltip_2.html",
+              text: gettext("The number of Verifiers in the block.") %>
+              <%= gettext("Miner Verifiers") %>
+            </dt>
+            <dd class="col-sm-9 col-lg-10">
+              <a href="#txs-verifier" class="page-link bs-label large btn-no-border-link-to-tems">
+                <%= if @block_miner_verifier_count == 1 do %>
+                  <%= gettext "%{count} Verifiers", count: @block_miner_verifier_count %>
+                <% else %>
+                  <%= gettext "%{count} Verifiers", count: @block_miner_verifier_count %>
+                <% end %>
+              </a>
+            </dd>
+          </dl>
           <% end %>
           <%= if !is_nil(@block.base_fee_per_gas) do%>
             <!-- Base Fee per Gas -->

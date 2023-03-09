@@ -36,6 +36,7 @@ defmodule BlockScoutWeb.WebRouter do
 
     resources "/block", BlockController, only: [:show], param: "hash_or_number" do
       resources("/transactions", BlockTransactionController, only: [:index], as: :transaction)
+      resources("/verifiers", BlockVerifiersController, only: [:index], as: :verifier)
     end
 
     resources("/blocks", BlockController, as: :blocks, only: [:index])
