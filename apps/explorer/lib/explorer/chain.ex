@@ -35,7 +35,6 @@ defmodule Explorer.Chain do
   alias Explorer.Counters.LastFetchedCounter
 
   alias Explorer.Chain
-
   alias Explorer.Chain.{
     Address,
     Address.CoinBalance,
@@ -63,7 +62,7 @@ defmodule Explorer.Chain do
     Wei
   }
 
-  alias Explorer.Chain.Block.{Verifiers,EmissionReward, Reward}
+  alias Explorer.Chain.Block.{Verifier,EmissionReward, Reward}
 
   alias Explorer.Chain.Cache.{
     Accounts,
@@ -910,8 +909,8 @@ defmodule Explorer.Chain do
   def block_to_miner_verifier_count(block_hash) do
     query =
       from(
-        verifiers in Verifiers,
-        where: verifiers.block_hash == ^block_hash
+        verifier in Verifier,
+        where: verifier.block_hash == ^block_hash
       )
 
     Repo.aggregate(query, :count, :block_hash)

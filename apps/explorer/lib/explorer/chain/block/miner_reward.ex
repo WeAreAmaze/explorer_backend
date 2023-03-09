@@ -1,15 +1,15 @@
-defmodule Explorer.Chain.Block.Verifiers do
+defmodule Explorer.Chain.Block.MinerReward do
   @moduledoc """
   Represents the total reward given to an address in a block.
   """
 
   use Explorer.Schema
 
-  alias Explorer.Chain.Block.Verifiers
+  alias Explorer.Chain.Block.MinerReward
   alias Explorer.Chain.{Block, Hash}
-  import Ecto.Query, only: [from: 2, preload: 3, subquery: 1, where: 3]
+  alias Explorer.Chain.Wei
 
-  @required_attrs ~w(address block_hash public_key)a
+  @required_attrs ~w(address block_hash amount)a
 
   @typedoc """
   The static block given to the miner of a verifiers.
@@ -17,18 +17,16 @@ defmodule Explorer.Chain.Block.Verifiers do
   * `:address` - block address
   * `:public_key` - key hash
   """
-
-  @type t :: %Verifiers{
+  @type t :: %MinerReward{
           address: String.t() | nil,
-          block: %Ecto.Association.NotLoaded{} | Block.t() | nil,
-          block_hash: Hash.Full.t() | nil,
-          public_key: String.t() | nil,
+          block_hash: Hash.Full.t(),
+          amount: Wei.t()
         }
 
   @primary_key false
-  schema "block_verifiers_rewards" do
+  schema "block_minner_rewards" do
     field(:address,:string)
-    field(:public_key, :string)
+    field(:amount, Wei)
     belongs_to(
       :block,
       Block,
@@ -39,8 +37,8 @@ defmodule Explorer.Chain.Block.Verifiers do
     timestamps()
   end
 
-  def changeset(%Verifiers{} = block_verifiers_rewards, attrs) do
-    block_verifiers_rewards
+  def changeset(%MinerReward{} = block_minner_rewards, attrs) do
+    block_minner_rewards
     |> cast(attrs, @required_attrs)
     |> validate_required([@required_attrs])
   end

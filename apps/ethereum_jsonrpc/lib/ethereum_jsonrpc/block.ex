@@ -460,7 +460,7 @@ defmodule EthereumJSONRPC.Block do
 
 
   @spec elixir_to_verifiers(elixir) :: Verifiers.elixir()
-  def elixir_to_verifiers(%{"verifiers" => verifiers}), do: verifiers
+  def elixir_to_verifiers(%{"verifier" => verifiers}), do: verifiers
 
   def elixir_to_verifiers(_), do: []
 

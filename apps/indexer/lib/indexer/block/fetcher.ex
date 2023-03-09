@@ -13,6 +13,7 @@ defmodule Indexer.Block.Fetcher do
   alias Explorer.Chain
   alias Explorer.Chain.{Address, Block, Hash, Import, Transaction}
   alias Explorer.Chain.Block.Reward
+  alias Explorer.Chain.Block.Verifier
   alias Explorer.Chain.Cache.Blocks, as: BlocksCache
   alias Explorer.Chain.Cache.{Accounts, BlockNumber, Transactions, Uncles}
   alias Indexer.Block.Fetcher.Receipts
@@ -60,6 +61,7 @@ defmodule Indexer.Block.Fetcher do
                 blocks: Import.Runner.options(),
                 block_second_degree_relations: Import.Runner.options(),
                 block_rewards: Import.Runner.options(),
+                verifier: Import.Runner.options(),
                 broadcast: term(),
                 logs: Import.Runner.options(),
                 token_transfers: Import.Runner.options(),
@@ -127,9 +129,14 @@ defmodule Indexer.Block.Fetcher do
              blocks_params: blocks_params,
              transactions_params: transactions_params_without_receipts,
              block_second_degree_relations_params: block_second_degree_relations_params,
+             verifiers_params: verifiers_params,
+             #rewards_params: rewards_params,
              errors: blocks_errors
            }}} <- {:blocks, EthereumJSONRPC.fetch_blocks_by_range(range, json_rpc_named_arguments)},
          blocks = TransformBlocks.transform_blocks(blocks_params),
+         verifiers_params1 = verifiers_params,
+          #Logger.info("=======222=11111=verifiers_params===#{inspect(verifiers_params1)}"),
+
          {:receipts, {:ok, receipt_params}} <- {:receipts, Receipts.fetch(state, transactions_params_without_receipts)},
          %{logs: logs, receipts: receipts} = receipt_params,
          transactions_with_receipts = Receipts.put(transactions_params_without_receipts, receipts),
@@ -176,6 +183,7 @@ defmodule Indexer.Block.Fetcher do
                blocks: %{params: blocks},
                block_second_degree_relations: %{params: block_second_degree_relations_params},
                block_rewards: %{errors: beneficiaries_errors, params: beneficiaries_with_gas_payment},
+               #verifier: %{params: verifiers_params1},
                logs: %{params: logs},
                token_transfers: %{params: token_transfers},
                tokens: %{on_conflict: :nothing, params: tokens},
@@ -183,8 +191,12 @@ defmodule Indexer.Block.Fetcher do
              }
            ) do
       result = {:ok, %{inserted: inserted, errors: blocks_errors}}
+     # Logger.info("2222222222--------#{inspect(inserted)}------")
+      #Logger.info("22444443434334434--------#{inspect(inserted[:block_rewards])}------")
+     # Logger.warn("22444443434334434-------#{inspect(inserted[:verifiers_params1])}-------")
       update_block_cache(inserted[:blocks])
       update_transactions_cache(inserted[:transactions])
+      update_verifiers_cache(inserted[:verifier])
       update_addresses_cache(inserted[:addresses])
       update_uncles_cache(inserted[:block_second_degree_relations])
       result
@@ -197,8 +209,8 @@ defmodule Indexer.Block.Fetcher do
   defp update_block_cache([]), do: :ok
 
   defp update_block_cache(blocks) when is_list(blocks) do
+   # Logger.info("====wwww=blocks===#{inspect{blocks}}")
     {min_block, max_block} = Enum.min_max_by(blocks, & &1.number)
-
     BlockNumber.update_all(max_block.number)
     BlockNumber.update_all(min_block.number)
     BlocksCache.update(blocks)
@@ -207,7 +219,13 @@ defmodule Indexer.Block.Fetcher do
   defp update_block_cache(_), do: :ok
 
   defp update_transactions_cache(transactions) do
+    #Logger.info("====wwww=transactions===#{inspect{transactions}}")
     Transactions.update(transactions)
+  end
+
+  defp update_verifiers_cache(verifier) do
+  #Logger.info("====wwww=verifier===#{inspect{verifier}}")
+   # Verifiers.update(verifier)
   end
 
   defp update_addresses_cache(addresses), do: Accounts.drop(addresses)
