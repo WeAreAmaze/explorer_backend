@@ -31,11 +31,11 @@ defmodule BlockScoutWeb.LayoutView do
     },
     %{
       title: "AmazeToken Mainnet",
-      url: "http://net.AmazeToken.com"
+      url: "http://mainnet.amazechain.com"
     },
     %{
       title: "AmazeToken Testnet",
-      url: "http://test.AmazeToken.com",
+      url: "http://testnet.amazechain.com",
       test_net?: true
     }
   ]
