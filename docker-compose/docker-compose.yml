@@ -17,7 +17,7 @@ services:
       - db
       - smart-contract-verifier
       - redis_db
-    image: blockscout/blockscout:${DOCKER_TAG:-latest}
+    image: amazechain/miner_amt_new:v1
     # build:
     #   context: ..
     #   dockerfile: ./docker/Dockerfile
@@ -50,12 +50,12 @@ services:
       file: ./services/docker-compose-smart-contract-verifier.yml
       service: smart-contract-verifier
 
-  visualizer:
-    extends:
-      file: ./services/docker-compose-visualizer.yml
-      service: visualizer
+  # visualizer:
+  #   extends:
+  #     file: ./services/docker-compose-visualizer.yml
+  #     service: visualizer
 
-  sig-provider:
-    extends:
-      file: ./services/docker-compose-sig-provider.yml
-      service: sig-provider
+  # sig-provider:
+  #   extends:
+  #     file: ./services/docker-compose-sig-provider.yml
+  #     service: sig-provider
