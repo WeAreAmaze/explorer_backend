@@ -39,7 +39,7 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     env_file:
-      -  ./envs/common-blockscout.env
+      -  ./envs/config.env
     ports:
       - 4000:4000
     volumes:

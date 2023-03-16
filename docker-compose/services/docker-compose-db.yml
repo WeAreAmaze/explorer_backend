@@ -11,4 +11,4 @@ services:
         POSTGRES_USER: 'postgres'
         POSTGRES_HOST_AUTH_METHOD: 'trust'
     ports:
-      - 7432:5432
+      - 5432:5432
