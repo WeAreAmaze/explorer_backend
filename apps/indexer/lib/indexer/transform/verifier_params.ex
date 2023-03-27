@@ -67,7 +67,7 @@ defmodule Indexer.Transform.VerifierParams do
   end
 
 
-  def reducer(%{verifiers_params: verifiers_params}, acc) when is_list(logs_params) do
+  def reducer(%{verifiers_params: verifiers_params}, acc) when is_list(verifiers_params) do
     verifiers_params
     |> Enum.into(acc, fn
       %{address_hash: address_hash, block_number: block_number}
