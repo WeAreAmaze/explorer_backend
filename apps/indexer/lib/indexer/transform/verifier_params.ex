@@ -61,30 +61,20 @@ defmodule Indexer.Transform.VerifierParams do
   #   "0x#{hash}"
   # end
 
-  def params_set(%{verifiers_params: verifiers_params_set, blocks_params: blocks}) do
-    verifiers_params =
-      verifiers_params_set
-      |> MapSet.to_list()
 
-    verifiers_params_params_list =
-      Enum.reduce(verifiers_params, [], fn verifiers_params, acc ->
-        address_hash = Map.get(verifiers_params, :address_hash)
-        publicKey = Map.get(verifiers_params, :publicKey)
+  def params_set(%{} = import_options) do
+    Enum.reduce(import_options, MapSet.new(), &reducer/1)
+  end
 
-        //
-        block =  elem(blocks, acc)
 
-        block_number = Map.get(block, :number)
-        block_hash = Map.get(block, :hash)
-
-        [%{address_hash: address_hash, publicKey: publicKey, block_number: block_number, block_hash: block_hash} | acc]
-      end)
-
-    verifiers_params_params_set =
-      verifiers_params_params_list
-      |> Enum.uniq()
-      |> Enum.into(MapSet.new())
-
-    verifiers_params_params_set
+  def reducer(%{verifiers_params: verifiers_params}, acc) when is_list(logs_params) do
+    verifiers_params
+    |> Enum.into(acc, fn
+      %{address_hash: address_hash, block_number: block_number}
+      when is_binary(address_hash) and is_integer(block_number) ->
+        %{address_hash: address_hash, block_number: block_number}
+    end)
+    |> Enum.reject(fn val -> is_nil(val) end)
+    |> MapSet.new()
   end
 end
