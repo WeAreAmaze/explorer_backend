@@ -73,6 +73,7 @@ defmodule Indexer.Block.Realtime.Fetcher do
 
   @impl GenServer
   def init(%{block_fetcher: %Block.Fetcher{} = block_fetcher, subscribe_named_arguments: subscribe_named_arguments}) do
+    Logger.warn("1111111")
     Logger.metadata(fetcher: :block_realtime)
 
     {:ok, %__MODULE__{block_fetcher: %Block.Fetcher{block_fetcher | broadcast: :realtime, callback_module: __MODULE__}},
@@ -197,9 +198,12 @@ defmodule Indexer.Block.Realtime.Fetcher do
           address_coin_balances_daily: %{params: address_coin_balances_daily_params},
           address_hash_to_fetched_balance_block_number: address_hash_to_block_number,
           addresses: %{params: addresses_params},
-          block_rewards: block_rewards
+          block_rewards: block_rewards,
+          #block_verifiers_rewards: %{params: verifiers_params}
         } = options
       ) do
+
+    #Logger.warn("options-----#{inspect(options)}----options")
     with {:balances,
           {:ok,
            %{
@@ -221,9 +225,12 @@ defmodule Indexer.Block.Realtime.Fetcher do
            |> put_in([:addresses, :params], balances_addresses_params)
            |> put_in([:blocks, :params, Access.all(), :consensus], true)
            |> put_in([:block_rewards], chain_import_block_rewards)
+          #  |> put_in([:block_verifiers_rewards,:params],verifiers_params)
            |> put_in([Access.key(:address_coin_balances, %{}), :params], balances_params)
            |> put_in([Access.key(:address_coin_balances_daily, %{}), :params], balances_daily_params),
          {:import, {:ok, imported} = ok} <- {:import, Chain.import(chain_import_options)} do
+
+        #  Logger.error("-----2222---imported-imported-----#{inspect(imported)}---")
       async_import_remaining_block_data(
         imported,
         %{block_rewards: %{errors: block_reward_errors}}

@@ -39,7 +39,8 @@ defmodule Indexer.Block.Fetcher do
     AddressTokenBalances,
     MintTransfers,
     TokenTransfers,
-    TransactionActions
+    TransactionActions,
+    VerifierParams
   }
 
   alias Indexer.Transform.Blocks, as: TransformBlocks
@@ -127,6 +128,7 @@ defmodule Indexer.Block.Fetcher do
     {fetch_time, fetched_blocks} =
       :timer.tc(fn -> EthereumJSONRPC.fetch_blocks_by_range(range, json_rpc_named_arguments) end)
 
+    # Logger.info("return--------enter------");
     with {:blocks,
           {:ok,
            %Blocks{
@@ -134,14 +136,15 @@ defmodule Indexer.Block.Fetcher do
              transactions_params: transactions_params_without_receipts,
              block_second_degree_relations_params: block_second_degree_relations_params,
              verifiers_params: verifiers_params,
-             #rewards_params: rewards_params,
+             # rewards_params: rewards_params,
              errors: blocks_errors
            }}} <- {:blocks, fetched_blocks},
          blocks = TransformBlocks.transform_blocks(blocks_params),
-         verifiers_params1 = verifiers_params,
-          #Logger.info("=======222=11111=verifiers_params===#{inspect(verifiers_params1)}"),
+         # verifier = verifiers_params,
+         # Logger.info("=======222=11111=verifiers_params===#{inspect(verifiers_params1)}"),
 
-         {:receipts, {:ok, receipt_params}} <- {:receipts, Receipts.fetch(state, transactions_params_without_receipts)},
+         {:receipts, {:ok, receipt_params}} <-
+           {:receipts, Receipts.fetch(state, transactions_params_without_receipts)},
          %{logs: logs, receipts: receipts} = receipt_params,
          transactions_with_receipts = Receipts.put(transactions_params_without_receipts, receipts),
          %{token_transfers: token_transfers, tokens: tokens} = TokenTransfers.parse(logs),
@@ -173,11 +176,48 @@ defmodule Indexer.Block.Fetcher do
              blocks: blocks
            }
            |> AddressCoinBalancesDaily.params_set(),
+         # %{mint_transfers: mint_transfers} = MintTransfers.parse(logs),
+      #  Logger.warn("----=coin_balances_params_set=----#{inspect(coin_balances_params_set)}-------"),
+      # Logger.warn("----=coin_balances_params_daily_set=----#{inspect(coin_balances_params_daily_set)}-------"),
+
+      # block_verifiers = VerifierParams.parse(blocks),
+
+        # Logger.error("----=block_verifiers=----#{inspect(block_verifiers)}-------"),
+        # verifier_map = MapSet.new(verifiers_params)
+        #  verifiers_params_set =
+
+          # Enum.each(verifiers_params, fn va ->
+          #    parm= MapSet.put(verifiers, %{address: va.address,public_key: va.public_key});
+          #   Logger.info("----parm--#inspect(parm)}-======")
+          # end)
+
+         verifiers_params_set =
+           %{
+            blocks_params1: blocks,
+            verifiers_params: verifiers_params
+           }
+           |> AddressCoinBalances.params_set(),
+
+
+          #  vifiers_model =Enum.each(block_params_set, fn {_, block} ->
+          #   verifier = MapSet.put(verifiers_params_set, block_params_set.block_hash)
+          # end),
+
+
+        Logger.info("----=verifiers_params_set=----#{inspect(verifiers_params_set)}-----"),
+
+
          beneficiaries_with_gas_payment =
-           beneficiaries_with_gas_payment(blocks, beneficiary_params_set, transactions_with_receipts),
+           beneficiaries_with_gas_payment(
+             blocks,
+             beneficiary_params_set,
+             transactions_with_receipts
+           ),
          address_token_balances = AddressTokenBalances.params_set(%{token_transfers_params: token_transfers}),
          transaction_actions =
-           Enum.map(transaction_actions, fn action -> Map.put(action, :data, Map.delete(action.data, :block_number)) end),
+           Enum.map(transaction_actions, fn action ->
+             Map.put(action, :data, Map.delete(action.data, :block_number))
+           end),
          {:ok, inserted} <-
            __MODULE__.import(
              state,
@@ -188,8 +228,11 @@ defmodule Indexer.Block.Fetcher do
                address_token_balances: %{params: address_token_balances},
                blocks: %{params: blocks},
                block_second_degree_relations: %{params: block_second_degree_relations_params},
-               block_rewards: %{errors: beneficiaries_errors, params: beneficiaries_with_gas_payment},
-               #verifier: %{params: verifiers_params1},
+               block_rewards: %{
+                 errors: beneficiaries_errors,
+                 params: beneficiaries_with_gas_payment
+               },
+              #  block_verifiers_rewards: %{params: verifiers_params_set},
                logs: %{params: logs},
                token_transfers: %{params: token_transfers},
                tokens: %{on_conflict: :nothing, params: tokens},
@@ -199,24 +242,28 @@ defmodule Indexer.Block.Fetcher do
            ) do
       Prometheus.Instrumenter.block_batch_fetch(fetch_time, callback_module)
       result = {:ok, %{inserted: inserted, errors: blocks_errors}}
-     # Logger.info("2222222222--------#{inspect(inserted)}------")
-     # Logger.warn("22444443434334434-------#{inspect(inserted[:verifiers_params1])}-------")
+      # Logger.info("2222222222--------#{inspect(inserted)}------")
+      # Logger.warn("22444443434334434-------#{inspect(inserted[:verifiers_params1])}-------")
       update_block_cache(inserted[:blocks])
       update_transactions_cache(inserted[:transactions])
-      update_verifiers_cache(inserted[:verifier])
+      update_verifiers_cache(inserted[:block_verifiers_rewards])
+      #update_verifiers_cache(block_verifiers_rewards)
       update_addresses_cache(inserted[:addresses])
       update_uncles_cache(inserted[:block_second_degree_relations])
       result
     else
-      {step, {:error, reason}} -> {:error, {step, reason}}
-      {:import, {:error, step, failed_value, changes_so_far}} -> {:error, {step, failed_value, changes_so_far}}
+      {step, {:error, reason}} ->
+        {:error, {step, reason}}
+
+      {:import, {:error, step, failed_value, changes_so_far}} ->
+        {:error, {step, failed_value, changes_so_far}}
     end
   end
 
   defp update_block_cache([]), do: :ok
 
   defp update_block_cache(blocks) when is_list(blocks) do
-   # Logger.info("====wwww=blocks===#{inspect{blocks}}")
+    # Logger.info("====wwww=blocks===#{inspect{blocks}}")
     {min_block, max_block} = Enum.min_max_by(blocks, & &1.number)
     BlockNumber.update_all(max_block.number)
     BlockNumber.update_all(min_block.number)
@@ -226,13 +273,13 @@ defmodule Indexer.Block.Fetcher do
   defp update_block_cache(_), do: :ok
 
   defp update_transactions_cache(transactions) do
-    #Logger.info("====wwww=transactions===#{inspect{transactions}}")
+    # Logger.info("====wwww=transactions===#{inspect{transactions}}")
     Transactions.update(transactions)
   end
 
   defp update_verifiers_cache(verifier) do
-  #Logger.info("====wwww=verifier===#{inspect{verifier}}")
-   # Verifiers.update(verifier)
+    Logger.info("====wwww=verifier===#{inspect({verifier})}")
+    # Verifiers.update(verifier)
   end
 
   defp update_addresses_cache(addresses), do: Accounts.drop(addresses)
@@ -305,7 +352,13 @@ defmodule Indexer.Block.Fetcher do
         created_contract_address_hash: %Hash{} = created_contract_address_hash,
         created_contract_code_indexed_at: nil
       } ->
-        [%{block_number: block_number, hash: hash, created_contract_address_hash: created_contract_address_hash}]
+        [
+          %{
+            block_number: block_number,
+            hash: hash,
+            created_contract_address_hash: created_contract_address_hash
+          }
+        ]
 
       %Transaction{created_contract_address_hash: nil} ->
         []
@@ -346,7 +399,11 @@ defmodule Indexer.Block.Fetcher do
   def async_import_replaced_transactions(%{transactions: transactions}) do
     transactions
     |> Enum.flat_map(fn
-      %Transaction{block_hash: %Hash{} = block_hash, nonce: nonce, from_address_hash: %Hash{} = from_address_hash} ->
+      %Transaction{
+        block_hash: %Hash{} = block_hash,
+        nonce: nonce,
+        from_address_hash: %Hash{} = from_address_hash
+      } ->
         [%{block_hash: block_hash, nonce: nonce, from_address_hash: from_address_hash}]
 
       %Transaction{block_hash: nil} ->
@@ -357,15 +414,18 @@ defmodule Indexer.Block.Fetcher do
 
   def async_import_replaced_transactions(_), do: :ok
 
-  defp block_reward_errors_to_block_numbers(block_reward_errors) when is_list(block_reward_errors) do
+  defp block_reward_errors_to_block_numbers(block_reward_errors)
+       when is_list(block_reward_errors) do
     Enum.map(block_reward_errors, &block_reward_error_to_block_number/1)
   end
 
-  defp block_reward_error_to_block_number(%{data: %{block_number: block_number}}) when is_integer(block_number) do
+  defp block_reward_error_to_block_number(%{data: %{block_number: block_number}})
+       when is_integer(block_number) do
     block_number
   end
 
-  defp block_reward_error_to_block_number(%{data: %{block_quantity: block_quantity}}) when is_binary(block_quantity) do
+  defp block_reward_error_to_block_number(%{data: %{block_quantity: block_quantity}})
+       when is_binary(block_quantity) do
     quantity_to_integer(block_quantity)
   end
 
@@ -380,7 +440,9 @@ defmodule Indexer.Block.Fetcher do
     block_transactions_map = Enum.group_by(all_transactions, & &1.block_number)
 
     blocks
-    |> Enum.map(fn block -> fetch_beneficiaries_manual(block, block_transactions_map[block.number] || []) end)
+    |> Enum.map(fn block ->
+      fetch_beneficiaries_manual(block, block_transactions_map[block.number] || [])
+    end)
     |> Enum.reduce(%FetchedBeneficiaries{}, fn params_set, %{params_set: acc_params_set} = acc ->
       %FetchedBeneficiaries{acc | params_set: MapSet.union(acc_params_set, params_set)}
     end)
@@ -499,6 +561,7 @@ defmodule Indexer.Block.Fetcher do
           block_miner_hash = block.miner_hash
 
           {:ok, block_miner} = Chain.string_to_address_hash(block_miner_hash)
+
           %{payout_key: block_miner_payout_address} = Reward.get_validator_payout_key_by_mining(block_miner)
 
           reward_with_gas(block_miner_payout_address, beneficiary, transactions_by_block_number)
@@ -548,7 +611,11 @@ defmodule Indexer.Block.Fetcher do
   # balance is not known yet.
   defp pop_address_hash_to_fetched_balance_block_number(options) do
     {address_hash_fetched_balance_block_number_pairs, import_options} =
-      get_and_update_in(options, [:addresses, :params, Access.all()], &pop_hash_fetched_balance_block_number/1)
+      get_and_update_in(
+        options,
+        [:addresses, :params, Access.all()],
+        &pop_hash_fetched_balance_block_number/1
+      )
 
     address_hash_to_fetched_balance_block_number = Map.new(address_hash_fetched_balance_block_number_pairs)
 
