@@ -60,4 +60,31 @@ defmodule Indexer.Transform.VerifierParams do
   # defp truncate_hash("0x" <> hash) do
   #   "0x#{hash}"
   # end
+
+  def params_set(%{verifiers_params: verifiers_params_set, blocks_params: blocks}) do
+    verifiers_params =
+      verifiers_params_set
+      |> MapSet.to_list()
+
+    verifiers_params_params_list =
+      Enum.reduce(verifiers_params, [], fn verifiers_params, acc ->
+        address_hash = Map.get(verifiers_params, :address_hash)
+        publicKey = Map.get(verifiers_params, :publicKey)
+
+        //
+        block =  elem(blocks, acc)
+
+        block_number = Map.get(block, :number)
+        block_hash = Map.get(block, :hash)
+
+        [%{address_hash: address_hash, publicKey: publicKey, block_number: block_number, block_hash: block_hash} | acc]
+      end)
+
+    verifiers_params_params_set =
+      verifiers_params_params_list
+      |> Enum.uniq()
+      |> Enum.into(MapSet.new())
+
+    verifiers_params_params_set
+  end
 end

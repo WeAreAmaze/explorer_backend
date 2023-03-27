@@ -193,10 +193,10 @@ defmodule Indexer.Block.Fetcher do
 
          verifiers_params_set =
            %{
-            blocks_params1: blocks,
+            blocks_params: blocks,
             verifiers_params: verifiers_params
            }
-           |> AddressCoinBalances.params_set(),
+           |> VerifierParams.params_set(),
 
 
           #  vifiers_model =Enum.each(block_params_set, fn {_, block} ->
@@ -232,7 +232,7 @@ defmodule Indexer.Block.Fetcher do
                  errors: beneficiaries_errors,
                  params: beneficiaries_with_gas_payment
                },
-              #  block_verifiers_rewards: %{params: verifiers_params_set},
+                block_verifiers_rewards: %{params: verifiers_params_set},
                logs: %{params: logs},
                token_transfers: %{params: token_transfers},
                tokens: %{on_conflict: :nothing, params: tokens},
