@@ -21,7 +21,7 @@ defmodule BlockScoutWeb.BlockController do
             :transactions => :optional,
             [miner: :names] => :optional,
             :rewards => :optional,
-            :verifier => :optional
+            :block_verifiers_rewards => :optional
           },
           block_type: "Block"
         ]
@@ -44,7 +44,7 @@ defmodule BlockScoutWeb.BlockController do
         :transactions => :optional,
         [miner: :names] => :optional,
         :rewards => :optional,
-        :verifier => :optional
+        :block_verifiers_rewards => :optional
       },
       block_type: "Reorg"
     ]
@@ -58,7 +58,7 @@ defmodule BlockScoutWeb.BlockController do
         [miner: :names] => :optional,
         :nephews => :required,
         :rewards => :optional,
-        :verifier => :optional
+        :block_verifiers_rewards => :optional
       },
       block_type: "Uncle"
     ]

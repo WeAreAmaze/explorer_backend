@@ -4,7 +4,7 @@ defmodule Explorer.Chain.Block do
   other data. Because each block (except for the initial "genesis block") points to the previous block, the data
   structure that they form is called a "blockchain".
   """
-
+  require  Logger
   use Explorer.Schema
 
   alias Explorer.Chain.{Address, Gas, Hash, PendingBlockOperation, Transaction, Wei}
@@ -63,7 +63,7 @@ defmodule Explorer.Chain.Block do
           timestamp: DateTime.t(),
           total_difficulty: difficulty(),
           transactions: %Ecto.Association.NotLoaded{} | [Transaction.t()],
-          verifier: %Ecto.Association.NotLoaded{} | [Verifier.t()],
+          block_verifiers_rewards: %Ecto.Association.NotLoaded{} | [Verifier.t()],
           refetch_needed: boolean(),
           base_fee_per_gas: Wei.t(),
           is_empty: boolean()
@@ -98,7 +98,7 @@ defmodule Explorer.Chain.Block do
 
     has_many(:transactions, Transaction)
 
-    has_many(:verifier, Verifier)
+    has_many(:block_verifiers_rewards, Verifier, foreign_key: :block_hash)
 
     has_many(:transaction_forks, Transaction.Fork, foreign_key: :uncle_hash)
 

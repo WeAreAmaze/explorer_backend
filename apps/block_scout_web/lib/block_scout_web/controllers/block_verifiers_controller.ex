@@ -14,9 +14,7 @@ defmodule BlockScoutWeb.BlockVerifiersController do
   {:ok, burn_address_hash} = Chain.string_to_address_hash("0x0000000000000000000000000000000000000000")
   @burn_address_hash burn_address_hash
 
-
   def index(conn, %{"block_hash_or_number" => formatted_block_hash_or_number, "type" => "JSON"} = params) do
-
     case param_block_hash_or_number_to_block(formatted_block_hash_or_number, []) do
       {:ok, block} ->
         full_options =
@@ -24,17 +22,21 @@ defmodule BlockScoutWeb.BlockVerifiersController do
             [
               necessity_by_association: %{
                 :block => :optional,
+                :block_verifiers_rewards => :optional,
                 [created_contract_address: :names] => :optional,
                 [from_address: :names] => :required,
-                [to_address: :names] => :optional
+                [to_address: :names] => :optional,
+                [created_contract_address: :smart_contract] => :optional,
+                [from_address: :smart_contract] => :optional,
+                [to_address: :smart_contract] => :optional
               }
             ],
             put_key_value_to_paging_options(paging_options(params), :is_index_in_asc_order, true)
           )
 
-        transactions_plus_one = Chain.block_to_transactions(block.hash, full_options)
-
+        transactions_plus_one = Chain.block_to_verifiers(block.hash, full_options)
         {transactions, next_page} = split_list_by_page(transactions_plus_one)
+        Logger.warn("verifiers---#{inspect(transactions)}---");
 
         next_page_path =
           case next_page_params(next_page, transactions, params) do
@@ -99,11 +101,11 @@ defmodule BlockScoutWeb.BlockVerifiersController do
   def index(conn, %{"block_hash_or_number" => formatted_block_hash_or_number}) do
     case param_block_hash_or_number_to_block(formatted_block_hash_or_number,
            necessity_by_association: %{
-             [miner: :names] => :required,
+             [miner: :names] => :optional,
              :uncles => :optional,
              :nephews => :optional,
              :rewards => :optional,
-             :verifier => :optional
+             :block_verifiers_rewards => :optional
            }
          ) do
       {:ok, block} ->
@@ -117,7 +119,7 @@ defmodule BlockScoutWeb.BlockVerifiersController do
           block_miner_verifier_count: block_miner_verifier_count,
           current_path: Controller.current_full_path(conn)
         )
-      #Logger.warn("--#{block.number}------333#{block.hash}---:#{inspect(block)}")
+      #Logger.warn("----333#{block.hash}---:#{inspect(block)}==txscount==#{block_transaction_count}====minner_count#{block_miner_verifier_count}")
 
       {:error, {:invalid, :hash}} ->
         not_found(conn)
@@ -136,7 +138,7 @@ defmodule BlockScoutWeb.BlockVerifiersController do
     end
   end
 
-  defp param_block_hash_or_number_to_block("0x" <> _ = param, options) do
+  def param_block_hash_or_number_to_block("0x" <> _ = param, options) do
     case string_to_block_hash(param) do
       {:ok, hash} ->
         hash_to_block(hash, options)
@@ -146,8 +148,8 @@ defmodule BlockScoutWeb.BlockVerifiersController do
     end
   end
 
-  defp param_block_hash_or_number_to_block(number_string, options)
-       when is_binary(number_string) do
+  def param_block_hash_or_number_to_block(number_string, options)
+      when is_binary(number_string) do
     case BlockScoutWeb.Chain.param_to_block_number(number_string) do
       {:ok, number} ->
         number_to_block(number, options)

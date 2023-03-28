@@ -971,6 +971,28 @@ defmodule Explorer.Chain do
         )).()
   end
 
+  @spec block_to_verifiers(Hash.Full.t(), [paging_options | necessity_by_association_option], true | false) :: [
+    Verifier.t()
+  ]
+  def block_to_verifiers(block_hash, options \\ [], old_ui? \\ true) when is_list(options) do
+    necessity_by_association = Keyword.get(options, :necessity_by_association, %{})
+
+    options
+    |> Keyword.get(:paging_options, @default_paging_options)
+    |> fetch_transactions_in_ascending_order_by_index()
+    |> join(:inner, [transaction], block in assoc(transaction, :block))
+    |> where([_, block], block.hash == ^block_hash)
+    |> join_associations(necessity_by_association)
+    |> (&if(old_ui?, do: preload(&1, [{:token_transfers, [:token, :from_address, :to_address]}]), else: &1)).()
+    |> Repo.all()
+    |> (&if(old_ui?,
+        do: &1,
+        else: Enum.map(&1, fn tx -> preload_token_transfers(tx, @token_transfers_necessity_by_association) end)
+      )).()
+  end
+
+
+
   @doc """
   Finds sum of gas_used for new (EIP-1559) txs belongs to block
   """
@@ -4438,6 +4460,13 @@ defmodule Explorer.Chain do
     |> order_by([transaction], desc: transaction.block_number, desc: transaction.index)
   end
 
+
+  defp fetch_verifiers_in_ascending_order_by_index(paging_options) do
+    Verifier
+    |> order_by([block_verifiers_rewards], desc: block_verifiers_rewards.inserted_at, asc: block_verifiers_rewards.updated_at)
+    |> handle_paging_options(paging_options)
+  end
+
   defp fetch_transactions_in_ascending_order_by_index(paging_options) do
     Transaction
     |> order_by([transaction], desc: transaction.block_number, asc: transaction.index)
@@ -4526,7 +4555,7 @@ defmodule Explorer.Chain do
         preload(query, [{^association, ^nested_preload}])
 
       :required ->
-        from(q in query,
+         from(q in query,
           inner_join: a in assoc(q, ^association),
           left_join: b in assoc(a, ^nested_preload),
           preload: [{^association, {a, [{^nested_preload, b}]}}]

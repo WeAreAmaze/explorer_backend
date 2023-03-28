@@ -131,7 +131,7 @@ defmodule BlockScoutWeb.ChainController do
       blocks =
         [paging_options: %PagingOptions{page_size: 4}]
         |> Chain.list_blocks()
-        |> Repo.preload([[miner: :names], :transactions, :rewards, :verifier])
+        |> Repo.preload([[miner: :names], :transactions, :rewards ,:block_verifiers_rewards])
         |> Enum.map(fn block ->
           %{
             chain_block_html:
@@ -142,7 +142,7 @@ defmodule BlockScoutWeb.ChainController do
               ),
             block_number: block.number
           }
-        #Logger.warn("-1111-#{block.number}---nnnnn---:#{inspect(block)}")
+      #Logger.warn("-1111-#{block.number}---nnnnn---:#{inspect(block)}")
         end)
       #Logger.warn("-----222---:#{inspect(blocks)}")
       json(conn, %{blocks: blocks})

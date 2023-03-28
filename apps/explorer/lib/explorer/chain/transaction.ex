@@ -17,6 +17,7 @@ defmodule Explorer.Chain.Transaction do
   alias Explorer.Chain.{
     Address,
     Block,
+    Block.Verifier,
     ContractMethod,
     Data,
     Gas,
@@ -174,7 +175,8 @@ defmodule Explorer.Chain.Transaction do
           max_priority_fee_per_gas: wei_per_gas | nil,
           max_fee_per_gas: wei_per_gas | nil,
           type: non_neg_integer() | nil,
-          has_error_in_internal_txs: boolean()
+          has_error_in_internal_txs: boolean(),
+         # block_verifiers_rewards: %Ecto.Association.NotLoaded{} | [Verifier.t()],
         }
 
   @derive {Poison.Encoder,
@@ -249,6 +251,9 @@ defmodule Explorer.Chain.Transaction do
     timestamps()
 
     belongs_to(:block, Block, foreign_key: :block_hash, references: :hash, type: Hash.Full)
+
+    #has_many(:block_verifiers_rewards, Verifier, foreign_key: :block_hash)
+
     has_many(:forks, Fork, foreign_key: :hash)
 
     belongs_to(

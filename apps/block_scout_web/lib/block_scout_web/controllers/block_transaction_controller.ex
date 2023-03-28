@@ -34,8 +34,8 @@ defmodule BlockScoutWeb.BlockTransactionController do
           )
 
         transactions_plus_one = Chain.block_to_transactions(block.hash, full_options)
-
         {transactions, next_page} = split_list_by_page(transactions_plus_one)
+        #Logger.warn("transactions---#{inspect(transactions)}---");
 
         next_page_path =
           case next_page_params(next_page, transactions, params) do
@@ -104,7 +104,7 @@ defmodule BlockScoutWeb.BlockTransactionController do
              :uncles => :optional,
              :nephews => :optional,
              :rewards => :optional,
-             :verifier => :optional
+             :block_verifiers_rewards => :optional
            }
          ) do
       {:ok, block} ->
