@@ -34,4 +34,20 @@ defmodule Indexer.Transform.VerifierParams do
   # defp truncate_hash("0x" <> hash) do
   #   "0x#{hash}"
   # end
+
+  # def params_set(%{} = import_options) do
+  #   Enum.reduce(import_options, MapSet.new(), &reducer/1)
+  # end
+
+
+  def reducer(%{verifiers_params: verifiers_params}, acc) when is_list(verifiers_params) do
+    verifiers_params
+    |> Enum.into(acc, fn
+      %{address_hash: address_hash, block_number: block_number}
+      when is_binary(address_hash) and is_integer(block_number) ->
+        %{address_hash: address_hash, block_number: block_number}
+    end)
+    |> Enum.reject(fn val -> is_nil(val) end)
+    |> MapSet.new()
+  end
 end
