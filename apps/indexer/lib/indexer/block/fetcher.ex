@@ -176,36 +176,17 @@ defmodule Indexer.Block.Fetcher do
              blocks: blocks
            }
            |> AddressCoinBalancesDaily.params_set(),
-         # %{mint_transfers: mint_transfers} = MintTransfers.parse(logs),
-      #  Logger.warn("----=coin_balances_params_set=----#{inspect(coin_balances_params_set)}-------"),
-      # Logger.warn("----=coin_balances_params_daily_set=----#{inspect(coin_balances_params_daily_set)}-------"),
 
-      # block_verifiers = VerifierParams.parse(blocks),
-
-        # Logger.error("----=block_verifiers=----#{inspect(block_verifiers)}-------"),
-        # verifier_map = MapSet.new(verifiers_params)
-        #  verifiers_params_set =
-
-          # Enum.each(verifiers_params, fn va ->
-          #    parm= MapSet.put(verifiers, %{address: va.address,public_key: va.public_key});
-          #   Logger.info("----parm--#inspect(parm)}-======")
-          # end)
-
-         verifiers_params_set =
-           %{
-            blocks_params: blocks,
-            verifiers_params: verifiers_params
-           }
-           |> VerifierParams.params_set(),
+        # block_verifiers = VerifierParams.parse(blocks),
+        # block_parm_set_list =
+        #    %{
+        #      blocks_params1: blocks,
+        #      verifiers_params: verifiers_params
+        #    }
+        #    |> AddressCoinBalances.params_set(),
 
 
-          #  vifiers_model =Enum.each(block_params_set, fn {_, block} ->
-          #   verifier = MapSet.put(verifiers_params_set, block_params_set.block_hash)
-          # end),
-
-
-        Logger.info("----=verifiers_params_set=----#{inspect(verifiers_params_set)}-----"),
-
+         #Logger.error("----=block_parm_set_list=----#{inspect(verifiers_params)}-----"),
 
          beneficiaries_with_gas_payment =
            beneficiaries_with_gas_payment(
@@ -213,7 +194,8 @@ defmodule Indexer.Block.Fetcher do
              beneficiary_params_set,
              transactions_with_receipts
            ),
-         address_token_balances = AddressTokenBalances.params_set(%{token_transfers_params: token_transfers}),
+         address_token_balances =
+           AddressTokenBalances.params_set(%{token_transfers_params: token_transfers}),
          transaction_actions =
            Enum.map(transaction_actions, fn action ->
              Map.put(action, :data, Map.delete(action.data, :block_number))
@@ -232,7 +214,7 @@ defmodule Indexer.Block.Fetcher do
                  errors: beneficiaries_errors,
                  params: beneficiaries_with_gas_payment
                },
-                block_verifiers_rewards: %{params: verifiers_params_set},
+               block_verifiers_rewards: %{params: verifiers_params},
                logs: %{params: logs},
                token_transfers: %{params: token_transfers},
                tokens: %{on_conflict: :nothing, params: tokens},
@@ -246,8 +228,7 @@ defmodule Indexer.Block.Fetcher do
       # Logger.warn("22444443434334434-------#{inspect(inserted[:verifiers_params1])}-------")
       update_block_cache(inserted[:blocks])
       update_transactions_cache(inserted[:transactions])
-      update_verifiers_cache(inserted[:block_verifiers_rewards])
-      #update_verifiers_cache(block_verifiers_rewards)
+      # update_verifiers_cache(inserted[:block_verifiers_rewards])
       update_addresses_cache(inserted[:addresses])
       update_uncles_cache(inserted[:block_second_degree_relations])
       result
@@ -278,7 +259,7 @@ defmodule Indexer.Block.Fetcher do
   end
 
   defp update_verifiers_cache(verifier) do
-    Logger.info("====wwww=verifier===#{inspect({verifier})}")
+    #Logger.info("====wwww=verifier===")
     # Verifiers.update(verifier)
   end
 
@@ -300,12 +281,14 @@ defmodule Indexer.Block.Fetcher do
       Map.merge(
         import_options,
         %{
-          address_hash_to_fetched_balance_block_number: address_hash_to_fetched_balance_block_number,
+          address_hash_to_fetched_balance_block_number:
+            address_hash_to_fetched_balance_block_number,
           broadcast: broadcast
         }
       )
 
-    {import_time, result} = :timer.tc(fn -> callback_module.import(state, options_with_broadcast) end)
+    {import_time, result} =
+      :timer.tc(fn -> callback_module.import(state, options_with_broadcast) end)
 
     no_blocks_to_import = length(options_with_broadcast.blocks.params)
 
@@ -562,7 +545,8 @@ defmodule Indexer.Block.Fetcher do
 
           {:ok, block_miner} = Chain.string_to_address_hash(block_miner_hash)
 
-          %{payout_key: block_miner_payout_address} = Reward.get_validator_payout_key_by_mining(block_miner)
+          %{payout_key: block_miner_payout_address} =
+            Reward.get_validator_payout_key_by_mining(block_miner)
 
           reward_with_gas(block_miner_payout_address, beneficiary, transactions_by_block_number)
 
@@ -617,7 +601,8 @@ defmodule Indexer.Block.Fetcher do
         &pop_hash_fetched_balance_block_number/1
       )
 
-    address_hash_to_fetched_balance_block_number = Map.new(address_hash_fetched_balance_block_number_pairs)
+    address_hash_to_fetched_balance_block_number =
+      Map.new(address_hash_fetched_balance_block_number_pairs)
 
     {address_hash_to_fetched_balance_block_number, import_options}
   end
@@ -628,6 +613,7 @@ defmodule Indexer.Block.Fetcher do
            hash: hash
          } = address_params
        ) do
-    {{hash, fetched_coin_balance_block_number}, Map.delete(address_params, :fetched_coin_balance_block_number)}
+    {{hash, fetched_coin_balance_block_number},
+     Map.delete(address_params, :fetched_coin_balance_block_number)}
   end
 end

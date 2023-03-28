@@ -70,7 +70,10 @@ defmodule EthereumJSONRPC.Block do
      `t:EthereumJSONRPC.hash/0`.
    * `"baseFeePerGas"` - `t:EthereumJSONRPC.quantity/0` of wei to denote amount of fee burned per unit gas used. Introduced in [EIP-1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md)
   """
-  @type t :: %{String.t() => EthereumJSONRPC.data() | EthereumJSONRPC.hash() | EthereumJSONRPC.quantity() | nil}
+  @type t :: %{
+          String.t() =>
+            EthereumJSONRPC.data() | EthereumJSONRPC.hash() | EthereumJSONRPC.quantity() | nil
+        }
 
   def from_response(%{id: id, result: nil}, id_to_params) when is_map(id_to_params) do
     params = Map.fetch!(id_to_params, id)
@@ -458,9 +461,29 @@ defmodule EthereumJSONRPC.Block do
 
   def elixir_to_transactions(_), do: []
 
+  # @spec elixir_to_verifiers(elixir) :: Verifiers.elixir()
+  # def elixir_to_verifiers(%{"verifier" => verifiers}), do: verifiers
 
   @spec elixir_to_verifiers(elixir) :: Verifiers.elixir()
-  def elixir_to_verifiers(%{"verifier" => verifiers}), do: verifiers
+  def elixir_to_verifiers(%{
+        "verifier" => verifiers,
+        "hash" => block_hash,
+        "number" => block_number
+      }) do
+    verifiers
+    |> Enum.map(fn acc ->
+      acc
+      |> Map.put("block_hash", block_hash)
+      |> Map.put("block_number", block_number)
+    end)
+
+    # |> Enum.map(fn acc ->
+    #   acc
+    #   |> Map.put(%{"block_hash" => block_hash})
+    #   |> Map.put(block_number,block_number)
+    # end)
+
+  end
 
   def elixir_to_verifiers(_), do: []
 
@@ -468,6 +491,7 @@ defmodule EthereumJSONRPC.Block do
   def elixir_to_rewards(%{"rewards" => rewards}), do: rewards
 
   def elixir_to_rewards(_), do: []
+
   @doc """
   Get `t:EthereumJSONRPC.Uncles.elixir/0` from `t:elixir/0`.
 
@@ -515,7 +539,9 @@ defmodule EthereumJSONRPC.Block do
   def elixir_to_uncles(%{"hash" => nephew_hash, "uncles" => uncles}) do
     uncles
     |> Enum.with_index()
-    |> Enum.map(fn {uncle_hash, index} -> %{"hash" => uncle_hash, "nephewHash" => nephew_hash, "index" => index} end)
+    |> Enum.map(fn {uncle_hash, index} ->
+      %{"hash" => uncle_hash, "nephewHash" => nephew_hash, "index" => index}
+    end)
   end
 
   @doc """

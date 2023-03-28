@@ -45,8 +45,10 @@ defmodule EthereumJSONRPC.AmazeToken.Verifier do
         }
 
   @type params :: %{
-          address_hash: EthereumJSONRPC.address(),
-          publicKey: String.t(),
+         # address_hash: EthereumJSONRPC.address(),
+          address_hash: String.t(),
+          block_hash: EthereumJSONRPC.hash(),
+          publicKey: String.t()
         }
 
   @doc """
@@ -94,12 +96,14 @@ defmodule EthereumJSONRPC.AmazeToken.Verifier do
   def elixir_to_params(
         %{
           "Address" => address_hash,
+          "block_hash" => block_hash,
           "PublicKey" => publicKey
         } = verifier
       ) do
     result = %{
-      address_hash: address_hash,
-      publicKey: publicKey
+      address: address_hash,
+      block_hash: block_hash,
+      public_key: publicKey
     }
     result
   end
@@ -166,7 +170,7 @@ defmodule EthereumJSONRPC.AmazeToken.Verifier do
   end
 
   defp entry_to_elixir({key, value})
-       when key in ~w(Address PublicKey),
+       when key in ~w(Address block_hash PublicKey),
        do: {key, value}
 
 
