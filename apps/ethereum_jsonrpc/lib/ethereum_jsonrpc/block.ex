@@ -488,7 +488,25 @@ defmodule EthereumJSONRPC.Block do
   def elixir_to_verifiers(_), do: []
 
   @spec elixir_to_rewards(elixir) :: Rewards.elixir()
-  def elixir_to_rewards(%{"rewards" => rewards}), do: rewards
+  def elixir_to_rewards(%{
+      "rewards" => rewards,
+      "hash" => block_hash,
+      "number" => block_number
+      }) do
+    rewards
+    |> Enum.map(fn acc ->
+      acc
+      |> Map.put("block_hash", block_hash)
+      |> Map.put("block_number", block_number)
+    end)
+
+    # |> Enum.map(fn acc ->
+    #   acc
+    #   |> Map.put(%{"block_hash" => block_hash})
+    #   |> Map.put(block_number,block_number)
+    # end)
+
+  end
 
   def elixir_to_rewards(_), do: []
 

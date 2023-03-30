@@ -1,0 +1,18 @@
+<tr>
+    <td class="stakes-td">
+      <span class="color-lighten">
+        <%= @index %>
+      </span>
+    </td>
+    <td class="stakes-td">
+        <span data-test="address"> <%= @verifiers.address %></span>
+    </td>
+      <hr>
+    <td class="stakes-td color-lighten">
+        <span data-test="block_hash"> <%= @verifiers.block_hash %></span>
+    </td>
+      <hr>
+    <td class="stakes-td color-lighten">
+      <span data-test="public_key"> <%= @verifiers.public_key %></span>
+    </td>
+</tr>

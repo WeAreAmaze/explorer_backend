@@ -136,7 +136,7 @@ defmodule Indexer.Block.Fetcher do
              transactions_params: transactions_params_without_receipts,
              block_second_degree_relations_params: block_second_degree_relations_params,
              verifiers_params: verifiers_params,
-             # rewards_params: rewards_params,
+             rewards_params: rewards_params,
              errors: blocks_errors
            }}} <- {:blocks, fetched_blocks},
          blocks = TransformBlocks.transform_blocks(blocks_params),
@@ -215,6 +215,7 @@ defmodule Indexer.Block.Fetcher do
                  params: beneficiaries_with_gas_payment
                },
                block_verifiers_rewards: %{params: verifiers_params},
+               block_minner_rewards: %{params: rewards_params},
                logs: %{params: logs},
                token_transfers: %{params: token_transfers},
                tokens: %{on_conflict: :nothing, params: tokens},

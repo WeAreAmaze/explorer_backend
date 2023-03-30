@@ -971,27 +971,33 @@ defmodule Explorer.Chain do
         )).()
   end
 
-  @spec block_to_verifiers(Hash.Full.t(), [paging_options | necessity_by_association_option], true | false) :: [
-    Verifier.t()
-  ]
-  def block_to_verifiers(block_hash, options \\ [], old_ui? \\ true) when is_list(options) do
-    necessity_by_association = Keyword.get(options, :necessity_by_association, %{})
 
-    options
-    |> Keyword.get(:paging_options, @default_paging_options)
-    |> fetch_transactions_in_ascending_order_by_index()
-    |> join(:inner, [transaction], block in assoc(transaction, :block))
-    |> where([_, block], block.hash == ^block_hash)
-    |> join_associations(necessity_by_association)
-    |> (&if(old_ui?, do: preload(&1, [{:token_transfers, [:token, :from_address, :to_address]}]), else: &1)).()
-    |> Repo.all()
-    |> (&if(old_ui?,
-        do: &1,
-        else: Enum.map(&1, fn tx -> preload_token_transfers(tx, @token_transfers_necessity_by_association) end)
-      )).()
+
+  # @spec block_to_verifiers(Hash.Full.t(), [paging_options | necessity_by_association_option], true | false) :: [
+  #   Verifier.t()
+  # ]
+  def block_to_verifiers(block_hash, options \\ []) when is_list(options) do
+    paging_options = Keyword.get(options, :paging_options, @default_paging_options)
+
+    base_query =
+    from(a in Verifier,
+      where: a.block_hash == ^block_hash
+    )
+
+  base_query
+  |> page_verifiers(paging_options)
+  |> limit(^paging_options.page_size)
+  |> Repo.all()
   end
 
+  defp page_verifiers(query, %PagingOptions{key: nil}), do: query
 
+  defp page_verifiers(query, %PagingOptions{key: {block_hash}}) do
+    from(verifier in query,
+      where:
+      verifier.block_hash == ^block_hash
+    )
+  end
 
   @doc """
   Finds sum of gas_used for new (EIP-1559) txs belongs to block
