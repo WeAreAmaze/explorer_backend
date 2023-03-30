@@ -5,12 +5,12 @@ defmodule Explorer.Repo.Migrations.CreateNewBlockVerifiersRewardsAddPrimary do
     drop(
       unique_index(
         :block_verifiers_rewards,
-        ~w(address block_hash)a
+        ~w(address_hash block_hash)a
       )
     )
 
     alter table(:block_verifiers_rewards) do
-      modify(:address, :string, null: false, primary_key: true)
+      modify(:address_hash, :bytea, null: false, primary_key: true)
       modify(:block_hash, :bytea, null: false, primary_key: true)
     end
   end

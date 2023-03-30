@@ -1,4 +1,7 @@
 defmodule Indexer.Transform.Addresses do
+
+  require Logger
+
   @moduledoc """
   Extract Addresses from data fetched from the Blockchain and structured as Blocks, InternalTransactions,
   Transactions and Logs.
@@ -133,6 +136,12 @@ defmodule Indexer.Transform.Addresses do
         %{from: :block_number, to: :fetched_coin_balance_block_number},
         %{from: :address_hash, to: :hash}
       ]
+    ],
+    verifiers: [
+      [
+        %{from: :block_number, to: :fetched_coin_balance_block_number},
+        %{from: :address_hash, to: :hash}
+      ]
     ]
   }
 
@@ -150,7 +159,7 @@ defmodule Indexer.Transform.Addresses do
   defstruct pending: false
 
   @doc """
-  Extract addresses from block, internal transaction, transaction, and log parameters.
+  Extract addresses from block, internal transaction, transaction, and log , verifiers parameters.
 
   Blocks have their `miner_hash` extracted.
 
@@ -423,6 +432,12 @@ defmodule Indexer.Transform.Addresses do
             }
           ],
           optional(:block_reward_contract_beneficiaries) => [
+            %{
+              required(:address_hash) => String.t(),
+              required(:block_number) => non_neg_integer()
+            }
+          ],
+          optional(:verifiers) => [
             %{
               required(:address_hash) => String.t(),
               required(:block_number) => non_neg_integer()

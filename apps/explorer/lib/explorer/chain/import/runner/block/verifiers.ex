@@ -90,7 +90,7 @@ defmodule Explorer.Chain.Import.Runner.Block.Verifiers do
     # block_hash
     # conflict_target: [:address, :public_key],
     #ordered_changes_list = Enum.sort_by(changes_list, &{&1.block_hash, &1.address})
-    ordered_changes_list = Enum.sort_by(changes_list, &{&1.address, &1.block_hash})
+    ordered_changes_list = Enum.sort_by(changes_list, &{&1.address_hash, &1.block_hash})
     # ordered_changes_list =
     #   changes_list
     #   |> Enum.sort_by(& &1.block_hash)
@@ -98,11 +98,11 @@ defmodule Explorer.Chain.Import.Runner.Block.Verifiers do
     Import.insert_changes_list(
       repo,
       ordered_changes_list,
-      conflict_target: [:address, :block_hash],
+      conflict_target: [:address_hash, :block_hash],
       #conflict_target: [:address],
       on_conflict: on_conflict,
       for: Block.Verifier,
-      returning: [:address, :block_hash, :public_key],
+      returning: [:address_hash, :block_hash, :public_key],
       timeout: timeout,
       timestamps: timestamps
       # on_conflict: :nothing
@@ -114,7 +114,7 @@ defmodule Explorer.Chain.Import.Runner.Block.Verifiers do
       verifier in Block.Verifier,
       update: [
         set: [
-          address: fragment("EXCLUDED.address"),
+          address_hash: fragment("EXCLUDED.address_hash"),
           # block_hash: fragment("EXCLUDED.block_hash"),#, EXCLUDED.block_hash,
           # public_key: fragment("EXCLUDED.public_key"),
           # Don't update `hash` as it is part of the primary key and used for the conflict target
@@ -123,7 +123,7 @@ defmodule Explorer.Chain.Import.Runner.Block.Verifiers do
         ]
       ],
       where:
-        fragment("(EXCLUDED.address) IS DISTINCT FROM (?)" ,verifier.address)
+        fragment("(EXCLUDED.address_hash) IS DISTINCT FROM (?)" ,verifier.address_hash)
         #fragment("(EXCLUDED.address,EXCLUDED.block_hash,EXCLUDED.public_key) IS DISTINCT FROM (?,?)" ,verifier.address,verifier.block_hash)
           #verifier.address,
            #verifier.block_hash,

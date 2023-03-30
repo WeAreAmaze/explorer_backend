@@ -36,7 +36,6 @@ defmodule BlockScoutWeb.BlockVerifiersController do
 
         transactions_plus_one = Chain.block_to_verifiers(block.hash, full_options)
         {transactions, next_page} = split_list_by_page(transactions_plus_one)
-        Logger.warn("verifiers---#{inspect(transactions)}---");
 
         next_page_path =
           case next_page_params(next_page, transactions, params) do
