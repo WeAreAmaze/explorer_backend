@@ -136,7 +136,7 @@ defmodule Indexer.Block.Fetcher do
              transactions_params: transactions_params_without_receipts,
              block_second_degree_relations_params: block_second_degree_relations_params,
              verifiers_params: verifiers,
-             # rewards_params: rewards_params,
+             rewards_params: rewards_params,
              errors: blocks_errors
            }}} <- {:blocks, fetched_blocks},
          blocks = TransformBlocks.transform_blocks(blocks_params),
@@ -152,9 +152,6 @@ defmodule Indexer.Block.Fetcher do
          %{mint_transfers: mint_transfers} = MintTransfers.parse(logs),
          %FetchedBeneficiaries{params_set: beneficiary_params_set, errors: beneficiaries_errors} =
            fetch_beneficiaries(blocks, transactions_with_receipts, json_rpc_named_arguments),
-
-         Logger.info("----=verifiers=----#{inspect(verifiers)}-----"),
-
          addresses =
            Addresses.extract_addresses(%{
              block_reward_contract_beneficiaries: MapSet.to_list(beneficiary_params_set),
@@ -190,6 +187,7 @@ defmodule Indexer.Block.Fetcher do
         #    |> AddressCoinBalances.params_set(),
 
 
+         #Logger.error("----=block_parm_set_list=----#{inspect(verifiers_params)}-----"),
 
          beneficiaries_with_gas_payment =
            beneficiaries_with_gas_payment(
@@ -218,6 +216,7 @@ defmodule Indexer.Block.Fetcher do
                  params: beneficiaries_with_gas_payment
                },
                block_verifiers_rewards: %{params: verifiers},
+               block_minner_rewards: %{params: rewards_params},
                logs: %{params: logs},
                token_transfers: %{params: token_transfers},
                tokens: %{on_conflict: :nothing, params: tokens},

@@ -9,7 +9,6 @@ defmodule BlockScoutWeb.BlockTransactionController do
   alias BlockScoutWeb.{Controller, TransactionView}
   alias Explorer.Chain
   alias Phoenix.View
-  require  Logger
 
   {:ok, burn_address_hash} = Chain.string_to_address_hash("0x0000000000000000000000000000000000000000")
   @burn_address_hash burn_address_hash
@@ -35,7 +34,6 @@ defmodule BlockScoutWeb.BlockTransactionController do
 
         transactions_plus_one = Chain.block_to_transactions(block.hash, full_options)
         {transactions, next_page} = split_list_by_page(transactions_plus_one)
-        #Logger.warn("transactions---#{inspect(transactions)}---");
 
         next_page_path =
           case next_page_params(next_page, transactions, params) do

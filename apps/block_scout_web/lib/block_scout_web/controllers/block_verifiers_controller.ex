@@ -6,7 +6,7 @@ defmodule BlockScoutWeb.BlockVerifiersController do
 
   import Explorer.Chain, only: [hash_to_block: 2, number_to_block: 2, string_to_block_hash: 1]
 
-  alias BlockScoutWeb.{Controller, TransactionView}
+  alias BlockScoutWeb.{Controller, BlockVerifiersView}
   alias Explorer.Chain
   alias Phoenix.View
   require  Logger
@@ -21,29 +21,28 @@ defmodule BlockScoutWeb.BlockVerifiersController do
           Keyword.merge(
             [
               necessity_by_association: %{
-                :block => :optional,
-                :block_verifiers_rewards => :optional,
-                [created_contract_address: :names] => :optional,
-                [from_address: :names] => :required,
-                [to_address: :names] => :optional,
-                [created_contract_address: :smart_contract] => :optional,
-                [from_address: :smart_contract] => :optional,
-                [to_address: :smart_contract] => :optional
+                [miner: :names] => :optional,
+                :block_verifiers_rewards => :optional
               }
             ],
             put_key_value_to_paging_options(paging_options(params), :is_index_in_asc_order, true)
           )
 
-        transactions_plus_one = Chain.block_to_verifiers(block.hash, full_options)
-        {transactions, next_page} = split_list_by_page(transactions_plus_one)
+        verifier_plus_one = Chain.block_to_verifiers(block.hash, full_options)
+       # total_supply = Chain.total_supply()
+
+        {verifiers, next_page} = split_list_by_page(verifier_plus_one)
+
+        #block_miner_verifier_count = Chain.block_to_miner_verifier_count(block.hash)
+        #Logger.warn("---verifiers---#{inspect(verifiers)}---");
 
         next_page_path =
-          case next_page_params(next_page, transactions, params) do
+          case next_page_params(next_page, verifiers, params) do
             nil ->
               nil
 
             next_page_params ->
-              block_transaction_path(
+              block_verifier_path(
                 conn,
                 :index,
                 block,
@@ -51,26 +50,19 @@ defmodule BlockScoutWeb.BlockVerifiersController do
               )
           end
 
-        items =
-          transactions
-          |> Enum.map(fn transaction ->
-            token_transfers_filtered_by_block_hash =
-              transaction.token_transfers
-              |> Enum.filter(fn token_transfer ->
-                token_transfer.block_hash == transaction.block_hash
-              end)
-
-            transaction_with_transfers_filtered =
-              Map.put(transaction, :token_transfers, token_transfers_filtered_by_block_hash)
-
-            View.render_to_string(
-              TransactionView,
+         items =
+         verifiers
+         |> Enum.with_index(1)
+         |> Enum.map(fn {verifier, index} ->
+           View.render_to_string(
+              BlockVerifiersView,
               "_tile.html",
-              transaction: transaction_with_transfers_filtered,
-              burn_address_hash: @burn_address_hash,
-              conn: conn
-            )
-          end)
+              verifiers: verifier,
+              index: index
+           )
+         end)
+
+        # Logger.info("==index-====2222===#{inspect(items)}")
 
         json(
           conn,
@@ -118,8 +110,6 @@ defmodule BlockScoutWeb.BlockVerifiersController do
           block_miner_verifier_count: block_miner_verifier_count,
           current_path: Controller.current_full_path(conn)
         )
-      #Logger.warn("----333#{block.hash}---:#{inspect(block)}==txscount==#{block_transaction_count}====minner_count#{block_miner_verifier_count}")
-
       {:error, {:invalid, :hash}} ->
         not_found(conn)
 

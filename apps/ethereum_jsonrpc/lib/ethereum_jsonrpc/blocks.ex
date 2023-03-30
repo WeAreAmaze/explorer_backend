@@ -16,7 +16,7 @@ defmodule EthereumJSONRPC.Blocks do
           block_second_degree_relations_params: [map()],
           transactions_params: [map()],
           verifiers_params: [map()],
-          #rewards_params: [map()],
+          rewards_params: [map()],
           errors: [Transport.error()]
         }
 
@@ -24,7 +24,7 @@ defmodule EthereumJSONRPC.Blocks do
             block_second_degree_relations_params: [],
             transactions_params: [],
             verifiers_params: [],
-            #rewards_params: [],
+            rewards_params: [],
             errors: []
 
   def requests(id_to_params, request) when is_map(id_to_params) and is_function(request, 1) do
@@ -60,7 +60,11 @@ defmodule EthereumJSONRPC.Blocks do
     elixir_verifiers = elixir_to_verifiers(elixir_blocks)
     verifiers_params = Verifiers.elixir_to_params(elixir_verifiers)
 
-    # Logger.error('----3333333-------#{inspect(transactions_params)}')
+    elixir_rewards = elixir_to_rewards(elixir_blocks)
+    rewards_params = Rewards.elixir_to_params(elixir_rewards)
+
+     Logger.error('----3333333-------#{inspect(elixir_rewards)}')
+     Logger.warn('----444-------#{inspect(rewards_params)}')
     # Logger.warn('----4444444-------#{inspect(verifiers_params)}')
     # elixir_rewards = elixir_to_rewards(elixir_blocks)
     # rewards_params = Rewards.elixir_to_params(elixir_rewards)
@@ -70,8 +74,8 @@ defmodule EthereumJSONRPC.Blocks do
       blocks_params: blocks_params,
       block_second_degree_relations_params: block_second_degree_relations_params,
       transactions_params: transactions_params,
-      verifiers_params: verifiers_params
-      #rewards_params: rewards_params
+      verifiers_params: verifiers_params,
+      rewards_params: rewards_params
     }
   end
 

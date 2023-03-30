@@ -2,7 +2,6 @@
 
   <%= render BlockScoutWeb.BlockView, "overview.html", assigns %>
 
-  <section>
     <div class="card mb-3">
       <div class="card-tabs js-card-tabs">
         <%=
@@ -27,24 +26,46 @@
 
       <%= render BlockScoutWeb.CommonComponentsView, "_pagination_container.html", position: "top", show_pagination_limit: true, data_next_page_button: true, data_prev_page_button: true %>
 
-        <button data-error-message class="alert alert-danger col-12 text-left" style="display: none;">
-          <span href="#" class="alert-link"><%= gettext("Something went wrong, click to reload.") %></span>
-        </button>
 
-        <div data-empty-response-message style="display: none;">
-          <div class="tile tile-muted text-center" data-selector="empty-transactions-list">
-            <%= gettext "There are no verifiers for this block." %>
-          </div>
+        <div class="addresses-table-container">
+              <div class="stakes-table-container">
+          <table>
+            <thead>
+              <tr>
+              <th class="stakes-table-th">
+                    <div class="stakes-table-th-content">
+                    &nbsp;
+                    </div>
+                  </th>
+                  <th class="stakes-table-th">
+                    <div class="stakes-table-th-content">
+                    Address
+                    </div>
+                  </th>
+                  <th class="stakes-table-th">
+                    <div class="stakes-table-th-content">
+                    Block Hash
+                    </div>
+                  </th>
+                  <th class="stakes-table-th">
+                    <div class="stakes-table-th-content">
+                    Public Key
+                    </div>
+                  </th>
+              </tr>
+            </thead>
+            <tbody data-items data-selector="top-addresses-list">
+              <%= render BlockScoutWeb.CommonComponentsView, "_table-loader.html", columns_num: 4 %>
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        <div data-items>
-          <%= render BlockScoutWeb.CommonComponentsView, "_tile-loader.html" %>
-        </div>
+      <%= render BlockScoutWeb.CommonComponentsView, "_pagination_container.html", position: "bottom", cur_page_number: "1", show_pagination_limit: true, data_next_page_button: true, data_prev_page_button: true %>
+      </div>
 
-        <%# <%= render BlockScoutWeb.CommonComponentsView, "_pagination_container.html", position: "bottom", cur_page_number: "1", show_pagination_limit: true, data_next_page_button: true, data_prev_page_button: true %>
 
     </div>
     <script defer data-cfasync="false" src="<%= static_path(@conn, "/js/async-listing-load.js") %>"></script>
     <script defer data-cfasync="false" src="<%= static_path(@conn, "/js/token-transfers-toggle.js") %>"></script>
-  </section>
 </section>
