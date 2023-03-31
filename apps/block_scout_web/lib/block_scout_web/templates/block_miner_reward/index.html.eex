@@ -36,7 +36,7 @@
 
       <div data-empty-response-message style="display: none;">
           <div class="tile tile-muted text-center" data-selector="empty-transactions-list">
-            <%= gettext "There are no verifiers for this block." %>
+            <%= gettext "There are no miner rewards for this block." %>
           </div>
       </div>
 
@@ -55,14 +55,9 @@
                     Address
                     </div>
                   </th>
-                  <%# <th class="stakes-table-th">
-                    <div class="stakes-table-th-content">
-                    Block Hash
-                    </div>
-                  </th> %>
                   <th class="stakes-table-th">
                     <div class="stakes-table-th-content">
-                    Public Key
+                    Amount
                     </div>
                   </th>
               </tr>
@@ -75,7 +70,7 @@
       </div>
 
       <%# <%= render BlockScoutWeb.CommonComponentsView, "_pagination_container.html", position: "bottom", cur_page_number: "1", show_pagination_limit: true, data_next_page_button: true, data_prev_page_button: true %>
-       <%#</div> %>
+      <%# </div> %>
 
 
     </div>

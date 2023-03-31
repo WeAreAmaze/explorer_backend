@@ -102,18 +102,21 @@ defmodule BlockScoutWeb.BlockTransactionController do
              :uncles => :optional,
              :nephews => :optional,
              :rewards => :optional,
-             :block_verifiers_rewards => :optional
+             :block_verifiers_rewards => :optional,
+             :block_minner_rewards => :optional
            }
          ) do
       {:ok, block} ->
         block_transaction_count = Chain.block_to_transaction_count(block.hash)
         block_miner_verifier_count = Chain.block_to_miner_verifier_count(block.hash)
+        block_miner_rewards_count = Chain.block_to_miner_rewards_count(block.hash)
         render(
           conn,
           "index.html",
           block: block,
           block_transaction_count: block_transaction_count,
           block_miner_verifier_count: block_miner_verifier_count,
+          block_miner_rewards_count: block_miner_rewards_count,
           current_path: Controller.current_full_path(conn)
         )
       #Logger.warn("----333#{block.hash}---:#{inspect(block)}==txscount==#{block_transaction_count}====minner_count#{block_miner_verifier_count}")

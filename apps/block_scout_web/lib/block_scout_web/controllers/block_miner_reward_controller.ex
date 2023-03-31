@@ -1,4 +1,4 @@
-defmodule BlockScoutWeb.BlockVerifiersController do
+defmodule BlockScoutWeb.BlockMinerRewardController do
   use BlockScoutWeb, :controller
 
   import BlockScoutWeb.Chain,
@@ -6,7 +6,7 @@ defmodule BlockScoutWeb.BlockVerifiersController do
 
   import Explorer.Chain, only: [hash_to_block: 2, number_to_block: 2, string_to_block_hash: 1]
 
-  alias BlockScoutWeb.{Controller, BlockVerifiersView}
+  alias BlockScoutWeb.{Controller, BlockMinerRewardView}
   alias Explorer.Chain
   alias Phoenix.View
   require  Logger
@@ -19,26 +19,26 @@ defmodule BlockScoutWeb.BlockVerifiersController do
             [
               necessity_by_association: %{
                 [miner: :names] => :optional,
-                :block_verifiers_rewards => :optional
+                :block_minner_rewards => :optional,
               }
             ],
             put_key_value_to_paging_options(paging_options(params), :is_index_in_asc_order, true)
           )
 
-        verifier_plus_one = Chain.block_to_verifiers(block.hash, full_options)
-       # total_supply = Chain.total_supply()
+        miner_reward_plus_one = Chain.block_to_miner_rewards(block.hash, full_options)
+        # total_supply = Chain.total_supply()
 
-        {verifiers, next_page} = split_list_by_page(verifier_plus_one)
+        {miner_rewards, next_page} = split_list_by_page(miner_reward_plus_one)
 
-        #Logger.warn("---verifiers---#{inspect(verifiers)}---");
+        #Logger.warn("---miner_rewards---#{inspect(miner_rewards)}---");
 
         next_page_path =
-          case next_page_params(next_page, verifiers, params) do
+          case next_page_params(next_page, miner_rewards, params) do
             nil ->
               nil
 
             next_page_params ->
-              block_verifier_path(
+              block_reward_path(
                 conn,
                 :index,
                 block,
@@ -47,13 +47,13 @@ defmodule BlockScoutWeb.BlockVerifiersController do
           end
 
          items =
-         verifiers
+         miner_rewards
          |> Enum.with_index(1)
-         |> Enum.map(fn {verifier, index} ->
+         |> Enum.map(fn {reward, index} ->
            View.render_to_string(
-              BlockVerifiersView,
+              BlockMinerRewardView,
               "_tile.html",
-              verifiers: verifier,
+              rewards: reward,
               index: index
            )
          end)

@@ -45,9 +45,10 @@ defmodule EthereumJSONRPC.AmazeToken.Reward do
         }
 
   @type params :: %{
-        # address_hash: EthereumJSONRPC.address(),
-        address_hash: String.t(),
+        address_hash: EthereumJSONRPC.address(),
+        #address_hash: String.t(),
         block_hash: EthereumJSONRPC.hash(),
+        block_number: non_neg_integer(),
         amount: EthereumJSONRPC.quantity(),
         }
 
@@ -97,12 +98,14 @@ defmodule EthereumJSONRPC.AmazeToken.Reward do
         %{
           "Address" => address_hash,
           "block_hash" => block_hash,
+          "block_number" => block_number,
           "Amount" => amount
         } = reward
       ) do
     result = %{
-      address: address_hash,
+      address_hash: address_hash,
       block_hash: block_hash,
+      block_number: block_number,
       amount: amount
     }
     result
@@ -170,7 +173,7 @@ defmodule EthereumJSONRPC.AmazeToken.Reward do
   end
 
   defp entry_to_elixir({key, value})
-       when key in ~w(Address block_hash Amount),
+       when key in ~w(Address Amount),
        do: {key, value}
 
 

@@ -61,7 +61,7 @@ defmodule Explorer.Chain do
     Wei
   }
 
-  alias Explorer.Chain.Block.{Verifier,EmissionReward, Reward}
+  alias Explorer.Chain.Block.{Verifier, MinnerReward, EmissionReward, Reward}
 
   alias Explorer.Chain.Cache.{
     Accounts,
@@ -990,6 +990,33 @@ defmodule Explorer.Chain do
   |> Repo.all()
   end
 
+  # @spec block_to_miner_rewards(Hash.Full.t(), [paging_options | necessity_by_association_option], true | false) :: [
+  #   Verifier.t()
+  # ]
+  def block_to_miner_rewards(block_hash, options \\ []) when is_list(options) do
+    paging_options = Keyword.get(options, :paging_options, @default_paging_options)
+
+    base_query =
+    from(a in MinnerReward,
+      where: a.block_hash == ^block_hash
+    )
+
+  base_query
+  |> page_rewards(paging_options)
+  |> limit(^paging_options.page_size)
+  |> Repo.all()
+  end
+
+
+  defp page_rewards(query, %PagingOptions{key: nil}), do: query
+
+  defp page_rewards(query, %PagingOptions{key: {block_hash}}) do
+    from(reward in query,
+      where:
+      reward.block_hash == ^block_hash
+    )
+  end
+
   defp page_verifiers(query, %PagingOptions{key: nil}), do: query
 
   defp page_verifiers(query, %PagingOptions{key: {block_hash}}) do
@@ -1082,6 +1109,18 @@ defmodule Explorer.Chain do
       from(
         verifier in Verifier,
         where: verifier.block_hash == ^block_hash
+      )
+
+    Repo.aggregate(query, :count, :block_hash)
+  end
+
+
+  @spec block_to_miner_rewards_count(Hash.Full.t()) :: non_neg_integer()
+  def block_to_miner_rewards_count(block_hash) do
+    query =
+      from(
+        minner in MinnerReward,
+        where: minner.block_hash == ^block_hash
       )
 
     Repo.aggregate(query, :count, :block_hash)

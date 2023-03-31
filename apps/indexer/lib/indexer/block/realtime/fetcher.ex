@@ -73,7 +73,6 @@ defmodule Indexer.Block.Realtime.Fetcher do
 
   @impl GenServer
   def init(%{block_fetcher: %Block.Fetcher{} = block_fetcher, subscribe_named_arguments: subscribe_named_arguments}) do
-    Logger.warn("1111111")
     Logger.metadata(fetcher: :block_realtime)
 
     {:ok, %__MODULE__{block_fetcher: %Block.Fetcher{block_fetcher | broadcast: :realtime, callback_module: __MODULE__}},
@@ -203,7 +202,6 @@ defmodule Indexer.Block.Realtime.Fetcher do
         } = options
       ) do
 
-    #Logger.warn("options-----#{inspect(options)}----options")
     with {:balances,
           {:ok,
            %{

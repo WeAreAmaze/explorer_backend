@@ -161,7 +161,8 @@ defmodule Indexer.Block.Fetcher do
              token_transfers: token_transfers,
              transactions: transactions_with_receipts,
              transaction_actions: transaction_actions,
-             verifiers: verifiers
+             verifiers: verifiers,
+             rewards_params: rewards_params
            }),
          coin_balances_params_set =
            %{

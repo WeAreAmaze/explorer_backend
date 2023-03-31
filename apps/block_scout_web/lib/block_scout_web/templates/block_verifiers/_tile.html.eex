@@ -5,11 +5,7 @@
       </span>
     </td>
     <td class="stakes-td">
-        <span data-test="address"> <%= @verifiers.address %></span>
-    </td>
-      <hr>
-    <td class="stakes-td color-lighten">
-        <span data-test="block_hash"> <%= @verifiers.block_hash %></span>
+        <span data-test="address"> <%= @verifiers.address_hash %></span>
     </td>
       <hr>
     <td class="stakes-td color-lighten">

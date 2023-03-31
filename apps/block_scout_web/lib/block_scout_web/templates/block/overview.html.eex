@@ -205,7 +205,15 @@
                 text: gettext("The number of reward in the block.") %>
                 <%= gettext("Miner Rewards") %>
               </dt>
-              <dd class="col-sm-9 col-lg-10"><%= @block.total_difficulty |> Decimal.to_integer() |> BlockScoutWeb.Cldr.Number.to_string! %></dd>
+              <dd class="col-sm-9 col-lg-10">
+              <a href="#txs-reward" class="page-link bs-label large btn-no-border-link-to-tems">
+                <%= if @block_miner_rewards_count == 1 do %>
+                  <%= gettext "%{count} Rewards", count: @block_miner_rewards_count %>
+                <% else %>
+                  <%= gettext "%{count} Rewards", count: @block_miner_rewards_count %>
+                <% end %>
+              </a>
+            </dd>
             </dl>
 
           <dl class="row">

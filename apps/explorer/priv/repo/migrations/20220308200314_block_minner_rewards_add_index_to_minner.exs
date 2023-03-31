@@ -5,7 +5,7 @@ defmodule Explorer.Repo.Migrations.AddUniqueIndexToMinner do
     create(
       unique_index(
         :block_minner_rewards,
-        [:address, :block_hash]
+        [:address_hash, :block_hash]
       )
     )
   end
