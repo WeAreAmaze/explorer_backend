@@ -4,8 +4,10 @@
         <%= @index %>
       </span>
     </td>
-    <td class="stakes-td">
-        <span data-test="address"> <%= @verifiers.address_hash %></span>
+   <td class="stakes-td">
+        <%= link to: address_path(BlockScoutWeb.Endpoint, :show, @verifiers.address_hash), "data-test": "address_hash_link", class: assigns[:class] do %>
+          <%= @verifiers.address_hash %>
+        <% end %>
     </td>
       <hr>
     <td class="stakes-td color-lighten">
