@@ -317,12 +317,14 @@ config :explorer, Explorer.ExchangeRates,
   coingecko_coin_id: System.get_env("EXCHANGE_RATES_COINGECKO_COIN_ID"),
   coingecko_api_key: System.get_env("EXCHANGE_RATES_COINGECKO_API_KEY"),
   coinmarketcap_api_key: System.get_env("EXCHANGE_RATES_COINMARKETCAP_API_KEY"),
+  #coinbitmart_api_key: System.get_env("EXCHANGE_RATES_BITMART_API_KEY"),
   fetch_btc_value: System.get_env("EXCHANGE_RATES_FETCH_BTC_VALUE") == "true"
 
 exchange_rates_source =
   cond do
     System.get_env("EXCHANGE_RATES_SOURCE") == "coin_gecko" -> Explorer.ExchangeRates.Source.CoinGecko
     System.get_env("EXCHANGE_RATES_SOURCE") == "coin_market_cap" -> Explorer.ExchangeRates.Source.CoinMarketCap
+    #System.get_env("EXCHANGE_RATES_SOURCE") == "coin_bitmart" -> Explorer.ExchangeRates.Source.CoinBitMart
     true -> Explorer.ExchangeRates.Source.CoinGecko
   end
 

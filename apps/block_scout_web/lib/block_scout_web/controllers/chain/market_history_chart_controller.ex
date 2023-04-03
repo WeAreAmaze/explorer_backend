@@ -3,21 +3,24 @@ defmodule BlockScoutWeb.Chain.MarketHistoryChartController do
 
   alias Explorer.{Chain, Market}
   alias Explorer.ExchangeRates.Token
-
+  # require Logger
   def show(conn, _params) do
     if ajax?(conn) do
       exchange_rate = Market.get_exchange_rate(Explorer.coin()) || Token.null()
 
       recent_market_history = Market.fetch_recent_history()
 
+      # Logger.warn("---11--#{inspect(exchange_rate)}-----#{inspect(recent_market_history)}-------")
+
       market_history_data =
         case recent_market_history do
-          [the_rest] ->
-            encode_market_history_data([%{closing_price: exchange_rate.usd_value} | the_rest])
+          [today | the_rest] ->
+            encode_market_history_data([%{today | closing_price: exchange_rate.usd_value} | the_rest])
 
           data ->
             encode_market_history_data(data)
         end
+      # Logger.warn("--------#{inspect(market_history_data)}-------")
 
       json(conn, %{
         history_data: market_history_data,
