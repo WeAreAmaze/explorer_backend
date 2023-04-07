@@ -1,10 +1,11 @@
 defmodule Explorer.ExchangeRates.Source.CoinBitMart do
   @moduledoc """
-  Adapter for fetching exchange rates from https://developer-pro.bitmart.com/
+  Adapter for fetching exchange rates from https://api-cloud.bitmart.com/spot/v1
   """
 
   alias Explorer.{Chain, ExchangeRates}
   alias Explorer.ExchangeRates.{Source, Token}
+  #require Logger
 
   import Source, only: [to_decimal: 1]
 
@@ -19,7 +20,7 @@ defmodule Explorer.ExchangeRates.Source.CoinBitMart do
     current_price = get_current_price(token_properties)
 
     id = token_properties && token_properties["id"]
-
+    #Logger.error("===bitmart----market_data--#{last_updated}===#{current_price}=")
     btc_value =
       if Application.get_env(:explorer, Explorer.ExchangeRates)[:fetch_btc_value],
         do: get_btc_value(id, token_properties)
@@ -40,7 +41,7 @@ defmodule Explorer.ExchangeRates.Source.CoinBitMart do
         id: id,
         last_updated: last_updated,
         market_cap_usd: to_decimal(market_cap_data_usd),
-        name: token_properties && token_properties["name"],
+        name: token_properties && token_properties["symbol"],
         symbol: token_properties && String.upcase(token_properties["symbol"]),
         usd_value: current_price,
         volume_24h_usd: to_decimal(total_volume_data_usd)
@@ -56,7 +57,7 @@ defmodule Explorer.ExchangeRates.Source.CoinBitMart do
     coin = Explorer.coin()
     symbol = if coin, do: String.upcase(Explorer.coin()), else: nil
 
-    if symbol, do: "#{api_quotes_latest_url()}?symbol=#{symbol}&CMC_PRO_API_KEY=#{api_key()}", else: nil
+    if symbol, do: "#{api_quotes_latest_url()}?symbol=AMT_USDT", else: nil
   end
 
   @impl Source
@@ -70,7 +71,7 @@ defmodule Explorer.ExchangeRates.Source.CoinBitMart do
         symbol = if input, do: input |> String.upcase(), else: nil
 
         if symbol,
-          do: "#{api_quotes_latest_url()}?symbol=#{symbol}&CMC_PRO_API_KEY=#{api_key()}",
+          do: "#{api_quotes_latest_url()}?symbol=AMT_USDT",
           else: nil
     end
   end
@@ -81,7 +82,7 @@ defmodule Explorer.ExchangeRates.Source.CoinBitMart do
   end
 
   defp api_key do
-    Application.get_env(:explorer, ExchangeRates)[:coinmarketcap_api_key]
+    Application.get_env(:explorer, ExchangeRates)[:coinbitmart_api_key]
   end
 
   defp get_token_properties(market_data) do
@@ -103,23 +104,21 @@ defmodule Explorer.ExchangeRates.Source.CoinBitMart do
   end
 
   defp get_circulating_supply(token_properties) do
-    token_properties && token_properties["circulating_supply"]
+    token_properties && token_properties["open_24h"]
   end
 
   defp get_total_supply(token_properties) do
-    token_properties && token_properties["total_supply"]
+    token_properties && token_properties["open_24h"]
   end
 
   defp get_market_cap_data_usd(token_properties) do
-    token_properties && token_properties["quote"] &&
-      token_properties["quote"]["USD"] &&
-      token_properties["quote"]["USD"]["market_cap"]
+    token_properties && token_properties["quote_volume_24h"] &&
+      token_properties["quote_volume_24h"]
   end
 
   defp get_total_volume_data_usd(token_properties) do
-    token_properties && token_properties["quote"] &&
-      token_properties["quote"]["USD"] &&
-      token_properties["quote"]["USD"]["volume_24h"]
+    token_properties && token_properties["base_volume_24h"] &&
+      token_properties["base_volume_24h"]
   end
 
   defp get_last_updated(token_properties) do
@@ -134,9 +133,8 @@ defmodule Explorer.ExchangeRates.Source.CoinBitMart do
   end
 
   defp get_current_price(token_properties) do
-    if token_properties && token_properties["quote"] && token_properties["quote"]["USD"] &&
-         token_properties["quote"]["USD"]["price"] do
-      to_decimal(token_properties["quote"]["USD"]["price"])
+    if token_properties && token_properties["last_price"] do
+      to_decimal(token_properties["last_price"])
     else
       1
     end
@@ -160,20 +158,20 @@ defmodule Explorer.ExchangeRates.Source.CoinBitMart do
   end
 
   defp base_url do
-    config(:base_url) || "https://pro-api.coinmarketcap.com/v2"
+    config(:base_url) || "https://api-cloud.bitmart.com/spot/v1"
   end
 
   defp api_quotes_latest_url do
-    "#{base_url()}/cryptocurrency/quotes/latest"
+    "#{base_url()}/ticker_detail"
   end
 
   defp get_btc_price(currency \\ "usd") do
-    url = "#{api_quotes_latest_url()}?symbol=BTC&CMC_PRO_API_KEY=#{api_key()}"
+    url = "#{api_quotes_latest_url()}?symbol=AMT_USDT"
 
     case Source.http_request(url, headers()) do
       {:ok, data} = resp ->
         if is_map(data) do
-          current_price = data["rates"][currency]["value"]
+          current_price = data["last_price"]
 
           {:ok, current_price}
         else
