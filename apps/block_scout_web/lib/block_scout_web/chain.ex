@@ -16,6 +16,8 @@ defmodule BlockScoutWeb.Chain do
     ]
 
   alias Explorer.Chain.Block.Reward
+  alias Explorer.Chain.Block.MinnerReward
+  alias Explorer.Chain.Block.Verifier
 
   alias Explorer.Chain.{
     Address,
@@ -109,6 +111,10 @@ defmodule BlockScoutWeb.Chain do
       end
 
     Map.put(next_page_params, "items_count", items_count)
+  end
+
+  def paging_options(%{"address_hash" => address_hash}) do
+    [paging_options: %{@default_paging_options | key: {address_hash}}]
   end
 
   def paging_options(%{"hash" => hash, "fetched_coin_balance" => fetched_coin_balance}) do
@@ -336,6 +342,15 @@ defmodule BlockScoutWeb.Chain do
 
   defp paging_params(%Transaction{block_number: block_number, index: index}) do
     %{"block_number" => block_number, "index" => index}
+  end
+
+
+  defp paging_params(%Verifier{address_hash: address_hash}) do
+    %{"address_hash" => address_hash}
+  end
+
+  defp paging_params(%MinnerReward{address_hash: address_hash}) do
+    %{"address_hash" => address_hash}
   end
 
   defp paging_params(%TokenTransfer{block_number: block_number, log_index: index}) do

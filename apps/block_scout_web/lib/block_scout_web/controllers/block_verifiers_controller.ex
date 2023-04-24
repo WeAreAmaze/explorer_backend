@@ -46,17 +46,27 @@ defmodule BlockScoutWeb.BlockVerifiersController do
               )
           end
 
-         items =
-         verifiers
-         |> Enum.with_index(1)
-         |> Enum.map(fn {verifier, index} ->
-           View.render_to_string(
+        items_count_str = Map.get(params, "items_count")
+
+        items_count =
+          if items_count_str do
+            {items_count, _} = Integer.parse(items_count_str)
+            items_count
+          else
+            0
+          end
+
+        items =
+          verifiers
+          |> Enum.with_index(1)
+          |> Enum.map(fn {verifier, index} ->
+            View.render_to_string(
               BlockVerifiersView,
               "_tile.html",
               verifiers: verifier,
-              index: index
-           )
-         end)
+              index: index + items_count
+            )
+          end)
 
         # Logger.info("==index-====2222===#{inspect(items)}")
 

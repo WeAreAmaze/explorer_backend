@@ -981,7 +981,8 @@ defmodule Explorer.Chain do
 
     base_query =
     from(a in Verifier,
-      where: a.block_hash == ^block_hash
+      where: a.block_hash == ^block_hash,
+      order_by: [a.address_hash]
     )
 
   base_query
@@ -998,7 +999,8 @@ defmodule Explorer.Chain do
 
     base_query =
     from(a in MinnerReward,
-      where: a.block_hash == ^block_hash
+      where: a.block_hash == ^block_hash,
+      order_by: [a.address_hash]
     )
 
   base_query
@@ -1010,19 +1012,19 @@ defmodule Explorer.Chain do
 
   defp page_rewards(query, %PagingOptions{key: nil}), do: query
 
-  defp page_rewards(query, %PagingOptions{key: {block_hash}}) do
+  defp page_rewards(query, %PagingOptions{key: {address_hash}}) do
     from(reward in query,
       where:
-      reward.block_hash == ^block_hash
+      reward.address_hash > ^address_hash
     )
   end
 
   defp page_verifiers(query, %PagingOptions{key: nil}), do: query
 
-  defp page_verifiers(query, %PagingOptions{key: {block_hash}}) do
+  defp page_verifiers(query, %PagingOptions{key: {address_hash}}) do
     from(verifier in query,
       where:
-      verifier.block_hash == ^block_hash
+      verifier.address_hash > ^address_hash
     )
   end
 
