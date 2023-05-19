@@ -7,7 +7,7 @@ defmodule Explorer.Chain.Block do
   require  Logger
   use Explorer.Schema
 
-  alias Explorer.Chain.{Address, Gas, Hash, PendingBlockOperation, Transaction, Wei}
+  alias Explorer.Chain.{Address, Gas, Hash, PendingBlockOperation, Transaction, Wei, Withdrawal}
   alias Explorer.Chain.Block.{Reward, SecondDegreeRelation}
   alias Explorer.Chain.Block.Verifier
   alias Explorer.Chain.Block.MinnerReward
@@ -109,6 +109,8 @@ defmodule Explorer.Chain.Block do
 
     has_many(:rewards, Reward, foreign_key: :block_hash)
 
+    has_many(:withdrawals, Withdrawal, foreign_key: :block_hash)
+
     has_one(:pending_operations, PendingBlockOperation, foreign_key: :block_hash)
   end
 
@@ -131,8 +133,8 @@ defmodule Explorer.Chain.Block do
   def blocks_without_reward_query do
     consensus_blocks_query =
       from(
-        b in __MODULE__,
-        where: b.consensus == true
+        block in __MODULE__,
+        where: block.consensus == true
       )
 
     validator_rewards =
