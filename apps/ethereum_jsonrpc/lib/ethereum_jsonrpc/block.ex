@@ -776,11 +776,11 @@ defmodule EthereumJSONRPC.Block do
     {key, Withdrawals.to_elixir(withdrawals, block_hash, quantity_to_integer(block_number))}
   end
 
-  defp entry_to_elixir({"verifier" = key, verifiers}) do
+  defp entry_to_elixir({"verifier" = key, verifiers}, _block) do
     {key, Verifiers.to_elixir(verifiers)}
   end
 
-  defp entry_to_elixir({"rewards" = key, rewards}) do
+  defp entry_to_elixir({"rewards" = key, rewards}, _block) do
     {key, Rewards.to_elixir(rewards)}
   end
 
