@@ -13,6 +13,6 @@ defmodule Explorer.Repo.Migrations.CreateNewBlockVerifiersRewards do
     end
 
     create(unique_index(:block_verifiers_rewards, [:block_hash, :address_hash]))
-#    create(index(:block_verifiers_rewards, :block_hash))
+    create(index(:block_verifiers_rewards, :address_hash))
   end
 end
