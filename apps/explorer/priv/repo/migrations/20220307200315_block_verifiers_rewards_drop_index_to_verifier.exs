@@ -3,8 +3,8 @@ defmodule Explorer.Repo.Migrations.AddUniqueIndexDropToVerifier do
 
   def change do
     drop_if_exists(
-      index(:block_verifiers_rewards, [:address_hash, :block_hash],
-        name: "block_verifiers_rewards_address_hash_block_hash_index"
+      index(:block_verifiers_rewards, [:block_hash, :address_hash],
+        name: "block_verifiers_rewards_block_hash_address_hash_index"
       )
     )
   end

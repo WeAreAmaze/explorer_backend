@@ -5,7 +5,7 @@ defmodule Explorer.Repo.Migrations.AddUniqueIndexToVerifier do
     create(
       unique_index(
         :block_verifiers_rewards,
-        [:address_hash, :block_hash]
+        [:block_hash, :address_hash]
       )
     )
   end
