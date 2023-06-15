@@ -117,8 +117,6 @@ defmodule Indexer.Block.Catchup.Fetcher do
     {async_import_remaining_block_data_options, options_with_block_rewards_errors} =
       Map.split(options, @async_import_remaining_block_data_options)
 
-    # Logger.warn("======33334444======#{inspect(options)}")
-
     {block_reward_errors, options_without_block_rewards_errors} =
       pop_in(options_with_block_rewards_errors[:block_rewards][:errors])
 
@@ -126,8 +124,6 @@ defmodule Indexer.Block.Catchup.Fetcher do
       put_in(options_without_block_rewards_errors, [:blocks, :params, Access.all(), :consensus], true)
 
     with {:import, {:ok, imported} = ok} <- {:import, Chain.import(full_chain_import_options)} do
-     # Logger.warn("-----33333---imported-imported-----#{inspect(imported)}---")
-
       async_import_remaining_block_data(
         imported,
         Map.put(async_import_remaining_block_data_options, :block_rewards, %{errors: block_reward_errors})
@@ -141,7 +137,6 @@ defmodule Indexer.Block.Catchup.Fetcher do
          imported,
          %{block_rewards: %{errors: block_reward_errors}} = options
        ) do
-    #Logger.info("---imported------#{inspect(imported)}--");
     async_import_block_rewards(block_reward_errors)
     async_import_coin_balances(imported, options)
     async_import_created_contract_codes(imported)
@@ -156,7 +151,6 @@ defmodule Indexer.Block.Catchup.Fetcher do
   defp stream_fetch_and_import(state, sequence)
        when is_pid(sequence) do
     ranges = Sequence.build_stream(sequence)
-   # Logger.warn("222222---2221qqq----")
 
     TaskSupervisor
     |> Task.Supervisor.async_stream(ranges, &fetch_and_import_range_from_sequence(state, &1, sequence),
@@ -178,13 +172,10 @@ defmodule Indexer.Block.Catchup.Fetcher do
          first..last = range,
          sequence
        ) do
-    # Logger.warn("222222---#{inspect(block_fetcher)}----");
-    # Logger.warn("333333-----#{inspect(range)}--");
     Logger.metadata(fetcher: :block_catchup, first_block_number: first, last_block_number: last)
     Process.flag(:trap_exit, true)
 
     {fetch_duration, result} = :timer.tc(fn -> fetch_and_import_range(block_fetcher, range) end)
-    # Logger.warn("44444-----enter fetch--");
 
     Prometheus.Instrumenter.block_full_process(fetch_duration, __MODULE__)
 

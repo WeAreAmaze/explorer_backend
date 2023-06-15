@@ -128,7 +128,6 @@ defmodule Indexer.Block.Fetcher do
     {fetch_time, fetched_blocks} =
       :timer.tc(fn -> EthereumJSONRPC.fetch_blocks_by_range(range, json_rpc_named_arguments) end)
 
-    # Logger.info("return--------enter------");
     with {:blocks,
           {:ok,
            %Blocks{
@@ -222,11 +221,8 @@ defmodule Indexer.Block.Fetcher do
       update_withdrawals_cache(inserted[:withdrawals])
       result
     else
-      {step, {:error, reason}} ->
-        {:error, {step, reason}}
-
-      {:import, {:error, step, failed_value, changes_so_far}} ->
-        {:error, {step, failed_value, changes_so_far}}
+      {step, {:error, reason}} -> {:error, {step, reason}}
+      {:import, {:error, step, failed_value, changes_so_far}} -> {:error, {step, failed_value, changes_so_far}}
     end
   end
 

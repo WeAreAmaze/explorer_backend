@@ -123,7 +123,6 @@ defmodule Indexer.Fetcher.InternalTransaction do
         safe_import_internal_transaction(internal_transactions_params, filtered_unique_numbers)
 
       {:error, reason} ->
-
         Logger.error(
           fn ->
             ["failed to fetch internal transactions for blocks: ", Exception.format(:error, reason)]

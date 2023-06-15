@@ -249,7 +249,6 @@ defmodule Explorer.Chain.Transaction do
     timestamps()
 
     belongs_to(:block, Block, foreign_key: :block_hash, references: :hash, type: Hash.Full)
-
     has_many(:forks, Fork, foreign_key: :hash)
 
     belongs_to(

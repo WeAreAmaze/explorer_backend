@@ -4,7 +4,7 @@ defmodule Explorer.Chain.Block do
   other data. Because each block (except for the initial "genesis block") points to the previous block, the data
   structure that they form is called a "blockchain".
   """
-  require  Logger
+
   use Explorer.Schema
 
   alias Explorer.Chain.{Address, Gas, Hash, PendingBlockOperation, Transaction, Wei, Withdrawal}

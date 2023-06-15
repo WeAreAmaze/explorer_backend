@@ -2,7 +2,6 @@
   <%= render BlockScoutWeb.Advertisement.TextAdView, "index.html", conn: @conn %>
   <div class="card">
     <div class="card-body" data-async-load data-async-listing="<%= @current_path %>">
-
       <h1 class="card-title list-title-description"><%= Explorer.coin_name() %> <%= gettext "Addresses" %></h1>
 
 	<div class="list-top-pagination-container-wrapper">

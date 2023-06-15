@@ -200,7 +200,6 @@ defmodule Indexer.Block.Realtime.Fetcher do
           #block_verifiers_rewards: %{params: verifiers_params}
         } = options
       ) do
-
     with {:balances,
           {:ok,
            %{
@@ -226,8 +225,6 @@ defmodule Indexer.Block.Realtime.Fetcher do
            |> put_in([Access.key(:address_coin_balances, %{}), :params], balances_params)
            |> put_in([Access.key(:address_coin_balances_daily, %{}), :params], balances_daily_params),
          {:import, {:ok, imported} = ok} <- {:import, Chain.import(chain_import_options)} do
-
-        #  Logger.error("-----2222---imported-imported-----#{inspect(imported)}---")
       async_import_remaining_block_data(
         imported,
         %{block_rewards: %{errors: block_reward_errors}}

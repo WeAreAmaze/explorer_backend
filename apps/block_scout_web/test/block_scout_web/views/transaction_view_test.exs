@@ -143,6 +143,7 @@ defmodule BlockScoutWeb.TransactionViewTest do
     test "with fee" do
       {:ok, gas_price} = Wei.cast(3_000_000_000)
       transaction = build(:transaction, gas_price: gas_price, gas_used: Decimal.from_float(1_034_234.0))
+
       expected_value = "0.003102702 ETH"
       assert expected_value == TransactionView.formatted_fee(transaction, denomination: :ether)
     end
@@ -159,7 +160,7 @@ defmodule BlockScoutWeb.TransactionViewTest do
       assert TransactionView.formatted_result(status) == "Pending"
     end
 
-    test "with block without status (pre-Byzantium/AmazeToken Class)" do
+    test "with block without status (pre-Byzantium/Ethereum Class)" do
       block = insert(:block)
 
       transaction =

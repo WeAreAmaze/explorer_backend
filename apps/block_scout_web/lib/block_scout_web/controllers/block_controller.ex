@@ -1,6 +1,6 @@
 defmodule BlockScoutWeb.BlockController do
   use BlockScoutWeb, :controller
-  require  Logger
+
   import BlockScoutWeb.Chain, only: [paging_options: 1, next_page_params: 3, split_list_by_page: 1]
 
   alias BlockScoutWeb.{BlockView, Controller}
@@ -75,7 +75,7 @@ defmodule BlockScoutWeb.BlockController do
       |> Chain.list_blocks()
 
     {blocks, next_page} = split_list_by_page(blocks_plus_one)
-    #Logger.info("-----1111--==blocks===----#{inspect(blocks)}")
+
     block_type = Keyword.get(full_options, :block_type, "Block")
 
     next_page_path =

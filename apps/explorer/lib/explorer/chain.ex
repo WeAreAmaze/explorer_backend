@@ -1101,7 +1101,6 @@ defmodule Explorer.Chain do
   def block_to_priority_fee_of_1559_txs(block_hash) do
     block = Repo.get_by(Block, hash: block_hash)
 
-
     case block.base_fee_per_gas do
       %Wei{value: base_fee_per_gas} ->
         query =
@@ -4766,7 +4765,7 @@ defmodule Explorer.Chain do
         preload(query, [{^association, ^nested_preload}])
 
       :required ->
-         from(q in query,
+        from(q in query,
           inner_join: a in assoc(q, ^association),
           left_join: b in assoc(a, ^nested_preload),
           preload: [{^association, {a, [{^nested_preload, b}]}}]

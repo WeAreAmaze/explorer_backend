@@ -1,7 +1,4 @@
 defmodule Indexer.Transform.Addresses do
-
-  require Logger
-
   @moduledoc """
   Extract Addresses from data fetched from the Blockchain and structured as Blocks, InternalTransactions,
   Transactions and Logs.
@@ -171,7 +168,7 @@ defmodule Indexer.Transform.Addresses do
   defstruct pending: false
 
   @doc """
-  Extract addresses from block, internal transaction, transaction, and log , verifiers parameters.
+  Extract addresses from block, internal transaction, transaction, and log parameters.
 
   Blocks have their `miner_hash` extracted.
 

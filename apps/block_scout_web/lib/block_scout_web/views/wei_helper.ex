@@ -35,7 +35,6 @@ defmodule BlockScoutWeb.WeiHelper do
       "10,000 Gwei"
 
       iex> format_wei_value(%Wei{value: Decimal.new(1, 10, 21)}, :ether)
-
       "10,000 ETH"
 
       # With formatting options

@@ -39,6 +39,7 @@ defmodule BlockScoutWeb.BlockTransactionController do
           )
 
         transactions_plus_one = Chain.block_to_transactions(block.hash, full_options)
+
         {transactions, next_page} = split_list_by_page(transactions_plus_one)
 
         next_page_path =
@@ -125,7 +126,6 @@ defmodule BlockScoutWeb.BlockTransactionController do
           block_miner_rewards_count: block_miner_rewards_count,
           current_path: Controller.current_full_path(conn)
         )
-      #Logger.warn("----333#{block.hash}---:#{inspect(block)}==txscount==#{block_transaction_count}====minner_count#{block_miner_verifier_count}")
 
       {:error, {:invalid, :hash}} ->
         not_found(conn)

@@ -72,10 +72,7 @@ defmodule EthereumJSONRPC.Block do
    * `"baseFeePerGas"` - `t:EthereumJSONRPC.quantity/0` of wei to denote amount of fee burned per unit gas used. Introduced in [EIP-1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md)
    * `"withdrawalsRoot"` - `t:EthereumJSONRPC.hash/0` of the root of the withdrawals.
   """
-  @type t :: %{
-          String.t() =>
-            EthereumJSONRPC.data() | EthereumJSONRPC.hash() | EthereumJSONRPC.quantity() | nil
-        }
+  @type t :: %{String.t() => EthereumJSONRPC.data() | EthereumJSONRPC.hash() | EthereumJSONRPC.quantity() | nil}
 
   def from_response(%{id: id, result: nil}, id_to_params) when is_map(id_to_params) do
     params = Map.fetch!(id_to_params, id)
@@ -569,9 +566,7 @@ defmodule EthereumJSONRPC.Block do
   def elixir_to_uncles(%{"hash" => nephew_hash, "uncles" => uncles}) do
     uncles
     |> Enum.with_index()
-    |> Enum.map(fn {uncle_hash, index} ->
-      %{"hash" => uncle_hash, "nephewHash" => nephew_hash, "index" => index}
-    end)
+    |> Enum.map(fn {uncle_hash, index} -> %{"hash" => uncle_hash, "nephewHash" => nephew_hash, "index" => index} end)
   end
 
   @doc """

@@ -67,13 +67,6 @@ defmodule EthereumJSONRPC.Blocks do
     elixir_rewards = elixir_to_rewards(elixir_blocks)
     rewards_params = Rewards.elixir_to_params(elixir_rewards)
 
-    # Logger.error('----3333333-------#{inspect(elixir_rewards)}')
-    # Logger.error('----blocks_params-------#{inspect(blocks_params)}')
-    # Logger.warn('----444-------#{inspect(rewards_params)}')
-    # Logger.warn('----elixir_verifiers-------#{inspect(elixir_verifiers)}')
-    # elixir_rewards = elixir_to_rewards(elixir_blocks)
-    # rewards_params = Rewards.elixir_to_params(elixir_rewards)
-
     %__MODULE__{
       errors: errors,
       blocks_params: blocks_params,

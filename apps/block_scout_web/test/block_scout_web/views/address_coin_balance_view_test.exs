@@ -7,11 +7,13 @@ defmodule BlockScoutWeb.AddressCoinBalanceViewTest do
   describe "format/1" do
     test "format the wei value in ether" do
       wei = Wei.from(Decimal.new(1_340_000_000), :gwei)
+
       assert AddressCoinBalanceView.format(wei) == "1.34 ETH"
     end
 
     test "format negative values" do
       wei = Wei.from(Decimal.new(-1_340_000_000), :gwei)
+
       assert AddressCoinBalanceView.format(wei) == "-1.34 ETH"
     end
   end
@@ -47,11 +49,13 @@ defmodule BlockScoutWeb.AddressCoinBalanceViewTest do
   describe "format_delta/1" do
     test "format positive values" do
       value = Decimal.new(1_340_000_000_000_000_000)
+
       assert AddressCoinBalanceView.format_delta(value) == "1.34 ETH"
     end
 
     test "format negative values" do
       value = Decimal.new(-1_340_000_000_000_000_000)
+
       assert AddressCoinBalanceView.format_delta(value) == "1.34 ETH"
     end
   end

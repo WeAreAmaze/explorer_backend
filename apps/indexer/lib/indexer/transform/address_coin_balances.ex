@@ -13,12 +13,8 @@ defmodule Indexer.Transform.AddressCoinBalances do
   end
 
   defp reducer({:beneficiary_params, beneficiary_params}, acc) when is_list(beneficiary_params) do
-    Enum.into(beneficiary_params, acc, fn %{
-                                            address_hash: address_hash,
-                                            block_number: block_number
-                                          }
-                                          when is_binary(address_hash) and
-                                                 is_integer(block_number) ->
+    Enum.into(beneficiary_params, acc, fn %{address_hash: address_hash, block_number: block_number}
+                                          when is_binary(address_hash) and is_integer(block_number) ->
       %{address_hash: address_hash, block_number: block_number}
     end)
   end
@@ -30,7 +26,7 @@ defmodule Indexer.Transform.AddressCoinBalances do
       %{address_hash: address_hash, block_number: block_number}
     end)
   end
-
+  # todo
   defp reducer({:blocks_params1, blocks_params1}, acc) when is_list(blocks_params1) do
     # a block MUST have a hash and number
     blocks_params1
@@ -69,15 +65,11 @@ defmodule Indexer.Transform.AddressCoinBalances do
     |> MapSet.new()
   end
 
-  defp reducer({:transactions_params, transactions_params}, initial)
-       when is_list(transactions_params) do
+  defp reducer({:transactions_params, transactions_params}, initial) when is_list(transactions_params) do
     Enum.reduce(transactions_params, initial, &transactions_params_reducer/2)
   end
 
-  defp reducer(
-         {:block_second_degree_relations_params, block_second_degree_relations_params},
-         initial
-       )
+  defp reducer({:block_second_degree_relations_params, block_second_degree_relations_params}, initial)
        when is_list(block_second_degree_relations_params),
        do: initial
 
