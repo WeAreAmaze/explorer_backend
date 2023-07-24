@@ -21,7 +21,6 @@ defmodule BlockScoutWeb.Notifier do
   alias Explorer.Chain.Supply.RSK
   alias Explorer.Chain.Transaction.History.TransactionStats
   alias Explorer.Counters.{AverageBlockTime, Helper}
-  alias Explorer.ExchangeRates.Token
   alias Explorer.SmartContract.{CompilerVersion, Solidity.CodeCompiler}
   alias Phoenix.View
 
@@ -115,7 +114,7 @@ defmodule BlockScoutWeb.Notifier do
   end
 
   def handle_event({:chain_event, :exchange_rate}) do
-    exchange_rate = Market.get_exchange_rate(Explorer.coin()) || Token.null()
+    exchange_rate = Market.get_coin_exchange_rate()
 
     market_history_data =
       case Market.fetch_recent_history() do
@@ -151,7 +150,7 @@ defmodule BlockScoutWeb.Notifier do
     |> Stream.map(
       &(InternalTransaction.where_nonpending_block()
         |> Repo.get_by(transaction_hash: &1.transaction_hash, index: &1.index)
-        |> Repo.preload([:from_address, :to_address, transaction: :block]))
+        |> Repo.preload([:from_address, :to_address, :block]))
     )
     |> Enum.each(&broadcast_internal_transaction/1)
   end
@@ -323,7 +322,7 @@ defmodule BlockScoutWeb.Notifier do
       "balance_update",
       %{
         address: address,
-        exchange_rate: Market.get_exchange_rate(Explorer.coin()) || Token.null()
+        exchange_rate: Market.get_coin_exchange_rate()
       }
     )
   end
