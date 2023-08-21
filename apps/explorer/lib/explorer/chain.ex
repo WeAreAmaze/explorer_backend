@@ -66,7 +66,10 @@ defmodule Explorer.Chain do
     Withdrawal
   }
 
-  alias Explorer.Chain.Block.{Verifier, MinnerReward, EmissionReward, Reward}
+  alias Explorer.Chain.Block.{MinnerReward, EmissionReward, Reward}
+
+  alias Explorer.Chain.Block.Verifier, as: AMCVerifier
+
 
   alias Explorer.Chain.Cache.{
     Accounts,
@@ -1001,7 +1004,7 @@ defmodule Explorer.Chain do
   def block_to_miner_verifier_count(block_hash) do
     query =
       from(
-        verifier in Verifier,
+        verifier in AMCVerifier,
         where: verifier.block_hash == ^block_hash
       )
 
