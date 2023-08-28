@@ -861,7 +861,7 @@ defmodule Explorer.Chain do
     paging_options = Keyword.get(options, :paging_options, @default_paging_options)
 
     base_query =
-      from(a in Verifier,
+      from(a in AMCVerifier,
         where: a.block_hash == ^block_hash,
         order_by: [a.address_hash]
       )
