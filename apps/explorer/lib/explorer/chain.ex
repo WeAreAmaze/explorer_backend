@@ -4071,7 +4071,7 @@ defmodule Explorer.Chain do
 
 
   defp fetch_verifiers_in_ascending_order_by_index(paging_options) do
-    Verifier
+    AMCVerifier
     |> order_by([block_verifiers_rewards], desc: block_verifiers_rewards.inserted_at, asc: block_verifiers_rewards.updated_at)
     |> handle_paging_options(paging_options)
   end
