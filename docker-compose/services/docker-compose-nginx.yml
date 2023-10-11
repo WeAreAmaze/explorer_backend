@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   proxy:
@@ -14,4 +14,4 @@ services:
     ports:
       - 80:80
       - 8080:8080
-      - 8090:8090
+      - 8081:8081

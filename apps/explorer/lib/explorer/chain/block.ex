@@ -7,7 +7,7 @@ defmodule Explorer.Chain.Block do
 
   use Explorer.Schema
 
-  alias Explorer.Chain.{Address, Gas, Hash, PendingBlockOperation, Transaction, Wei, Withdrawal}
+  alias Explorer.Chain.{Address, Block, Gas, Hash, PendingBlockOperation, Transaction, Wei, Withdrawal}
   alias Explorer.Chain.Block.{Reward, SecondDegreeRelation}
   alias Explorer.Chain.Block.Verifier
   alias Explorer.Chain.Block.MinnerReward
@@ -158,9 +158,13 @@ defmodule Explorer.Chain.Block do
   def block_type_filter(query, "Block"), do: where(query, [block], block.consensus == true)
 
   def block_type_filter(query, "Reorg") do
-    query
-    |> join(:left, [block], uncles in assoc(block, :nephew_relations))
-    |> where([block, uncles], block.consensus == false and is_nil(uncles.uncle_hash))
+    from(block in query,
+      as: :block,
+      left_join: uncles in assoc(block, :nephew_relations),
+      where:
+        block.consensus == false and is_nil(uncles.uncle_hash) and
+          exists(from(b in Block, where: b.number == parent_as(:block).number and b.consensus))
+    )
   end
 
   def block_type_filter(query, "Uncle"), do: where(query, [block], block.consensus == false)
