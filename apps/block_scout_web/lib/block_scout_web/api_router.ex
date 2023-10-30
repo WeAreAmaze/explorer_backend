@@ -148,6 +148,7 @@ defmodule BlockScoutWeb.ApiRouter do
       get("/:block_hash_or_number", V2.BlockController, :block)
       get("/:block_hash_or_number/transactions", V2.BlockController, :transactions)
       get("/:block_hash_or_number/withdrawals", V2.BlockController, :withdrawals)
+      get("/:block_hash_or_number/verifiers", V2.AmcController, :verifiers)
     end
 
     scope "/addresses" do
