@@ -22,7 +22,6 @@ defmodule Explorer.Chain.Block.Verifier do
   @type t :: %__MODULE__{
           address: %Ecto.Association.NotLoaded{} | Address.t() | nil,
           address_hash: Address.hash(),
-#          address: String.t(),
           block: %Ecto.Association.NotLoaded{} | Block.t() | nil,
           block_hash: Block.hash(),
           public_key: String.t() | nil
@@ -30,25 +29,9 @@ defmodule Explorer.Chain.Block.Verifier do
 
   @primary_key false
   schema "block_verifiers_rewards" do
-#    field(:address_hash, Hash.Address)
     field(:public_key, :string)
-
-    belongs_to(
-      :address,
-      Address,
-      foreign_key: :address_hash,
-      references: :hash,
-      type: Hash.Address
-    )
-
+    belongs_to(:address,Address,foreign_key: :address_hash,references: :hash,type: Hash.Address)
     belongs_to(:block, Block, foreign_key: :block_hash, references: :hash, type: Hash.Full)
-    # belongs_to(
-    #   :block,
-    #   Block,
-    #   foreign_key: :block_hash,
-    #   references: :hash,
-    #   type: Hash.Full
-    # )block_verifiers_rewards_address_block_hash_index
     timestamps()
   end
 

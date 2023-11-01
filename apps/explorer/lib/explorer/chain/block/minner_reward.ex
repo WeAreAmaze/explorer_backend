@@ -17,9 +17,6 @@ defmodule Explorer.Chain.Block.MinnerReward do
   * `:public_key` - key hash
   """
   @type t :: %__MODULE__{
-          # address_hash: %Ecto.Association.NotLoaded{} | Address.t() | nil,
-          # address: Hash.Address.t(),
-          # address: String.t() | nil,
           address: %Ecto.Association.NotLoaded{} | Address.t() | nil,
           address_hash: Address.hash(),
           block: %Ecto.Association.NotLoaded{} | Block.t() | nil,
