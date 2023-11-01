@@ -871,6 +871,28 @@ defmodule Explorer.Chain do
     |> Repo.all()
   end
 
+
+  # @spec address_to_verifiers(Hash.Full.t(), [paging_options | necessity_by_association_option], true | false) :: [
+  #   Verifier.t()
+  # ]
+  def address_to_verifiers(address_hash, options \\ []) when is_list(options) do
+    paging_options = Keyword.get(options, :paging_options, @default_paging_options)
+
+    base_query =
+      from(a in AMCVerifier,
+        inner_join: b in Block,
+        on: a.block_hash == b.hash,
+        where: a.address_hash == ^address_hash,
+        select:  %{address_hash: a.address_hash, block_timestamp: b.timestamp, block_number: b.number},
+        order_by: [desc: b.number],
+      )
+
+    base_query
+    |> page_address_verifiers(paging_options)
+    |> limit(^paging_options.page_size)
+    |> Repo.all()
+  end
+
   # @spec block_to_miner_rewards(Hash.Full.t(), [paging_options | necessity_by_association_option], true | false) :: [
   #   Verifier.t()
   # ]
@@ -889,6 +911,36 @@ defmodule Explorer.Chain do
     |> Repo.all()
   end
 
+
+  def address_to_miner_rewards(address_hash, options \\ []) when is_list(options) do
+    paging_options = Keyword.get(options, :paging_options, @default_paging_options)
+
+    base_query =
+      from(a in MinnerReward,
+        inner_join: b in Block,
+        on: a.block_hash == b.hash,
+        where: a.address_hash == ^address_hash,
+        select:  %{address_hash: a.address_hash, block_timestamp: b.timestamp, block_number: b.number, amount: a.amount},
+        order_by: [desc: b.number],
+      )
+
+    base_query
+    |> page_address_rewards(paging_options)
+    |> limit(^paging_options.page_size)
+    |> Repo.all()
+  end
+
+  defp page_address_rewards(query, %PagingOptions{key: nil}), do: query
+
+  defp page_address_rewards(query, %PagingOptions{key: {block_number}}) do
+    where(query, [_, block], block.number < ^block_number)
+  end
+
+  defp page_address_verifiers(query, %PagingOptions{key: nil}), do: query
+
+  defp page_address_verifiers(query, %PagingOptions{key: {block_number}}) do
+    where(query, [_, block], block.number < ^block_number)
+  end
 
   defp page_rewards(query, %PagingOptions{key: nil}), do: query
 

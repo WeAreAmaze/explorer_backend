@@ -149,6 +149,7 @@ defmodule BlockScoutWeb.ApiRouter do
       get("/:block_hash_or_number/transactions", V2.BlockController, :transactions)
       get("/:block_hash_or_number/withdrawals", V2.BlockController, :withdrawals)
       get("/:block_hash_or_number/verifiers", V2.AmcController, :verifiers)
+      get("/:block_hash_or_number/rewards", V2.AmcController, :rewards)
     end
 
     scope "/addresses" do
@@ -166,6 +167,8 @@ defmodule BlockScoutWeb.ApiRouter do
       get("/:address_hash_param/coin-balance-history", V2.AddressController, :coin_balance_history)
       get("/:address_hash_param/coin-balance-history-by-day", V2.AddressController, :coin_balance_history_by_day)
       get("/:address_hash_param/withdrawals", V2.AddressController, :withdrawals)
+      get("/:address_hash_param/verifiers", V2.AmcController, :verifiers)
+      get("/:address_hash_param/rewards", V2.AmcController, :rewards)
     end
 
     scope "/tokens" do

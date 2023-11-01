@@ -500,6 +500,13 @@ defmodule BlockScoutWeb.Chain do
     %{"block_number" => block_number, "index" => index}
   end
 
+  defp paging_params(%{address_hash: address_hash, block_timestamp: timestamp, block_number: number}) do
+    %{"block_number" => number}
+  end
+
+  defp paging_params(%{address_hash: address_hash, block_timestamp: timestamp, block_number: number, amount: amount}) do
+    %{"block_number" => number}
+  end
 
   defp paging_params(%Verifier{address_hash: address_hash}) do
     %{"address_hash" => address_hash}
