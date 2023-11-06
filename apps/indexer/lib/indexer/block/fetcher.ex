@@ -44,6 +44,8 @@ defmodule Indexer.Block.Fetcher do
     VerifierParams
   }
 
+  alias Indexer.Transform.Amc.AddressVerifyDaily
+
   alias Indexer.Transform.PolygonEdge.{DepositExecutes, Withdrawals}
 
   alias Indexer.Transform.Blocks, as: TransformBlocks
@@ -67,6 +69,7 @@ defmodule Indexer.Block.Fetcher do
                 block_second_degree_relations: Import.Runner.options(),
                 block_rewards: Import.Runner.options(),
                 verifier: Import.Runner.options(),
+                address_verify_daily: Import.Runner.options(),
                 broadcast: term(),
                 logs: Import.Runner.options(),
                 token_transfers: Import.Runner.options(),
@@ -186,6 +189,12 @@ defmodule Indexer.Block.Fetcher do
              blocks: blocks
            }
            |> AddressCoinBalancesDaily.params_set(),
+         address_verify_daily_set =
+           %{
+             verifiers_params: verifiers,
+             blocks: blocks
+           }
+           |> AddressVerifyDaily.params_set(),
          beneficiaries_with_gas_payment =
            beneficiaries_with_gas_payment(blocks, beneficiary_params_set, transactions_with_receipts),
          address_token_balances = AddressTokenBalances.params_set(%{token_transfers_params: token_transfers}),
@@ -196,6 +205,7 @@ defmodule Indexer.Block.Fetcher do
            addresses: %{params: addresses},
            address_coin_balances: %{params: coin_balances_params_set},
            address_coin_balances_daily: %{params: coin_balances_params_daily_set},
+           address_block_verify_epoch: %{params: address_verify_daily_set},
            address_token_balances: %{params: address_token_balances},
            address_current_token_balances: %{
              params: address_token_balances |> MapSet.to_list() |> TokenBalances.to_address_current_token_balances()

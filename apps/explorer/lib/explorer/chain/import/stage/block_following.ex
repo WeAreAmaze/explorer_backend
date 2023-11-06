@@ -18,7 +18,8 @@ defmodule Explorer.Chain.Import.Stage.BlockFollowing do
       Runner.Address.CurrentTokenBalances,
       Runner.TokenInstances,
       Runner.Block.Verifiers,
-      Runner.Block.MinnerRewards
+      Runner.Block.MinnerRewards,
+      Runner.Amc.AddressVerifyDaily
     ]
 
   @impl Stage

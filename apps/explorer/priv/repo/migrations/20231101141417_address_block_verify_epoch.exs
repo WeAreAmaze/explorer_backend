@@ -4,10 +4,9 @@ defmodule Explorer.Repo.Migrations.AddressBlockVerifyEpoch do
   def change do
     create table(:address_block_verify_epoch, primary_key: false) do
       add(:address_hash, :bytea,  null: false, primary_key: true)
-      add(:epoch, :bigint, null: false, primary_key: true)
+      add(:epoch, :integer, null: false, primary_key: true)
 
-      # null until fetched
-      add(:count, :bigint, default: fragment("NULL"), null: true)
+      add(:verify_count, :integer, null: false)
 
       timestamps(null: false, type: :utc_datetime_usec)
     end
