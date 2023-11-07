@@ -169,6 +169,7 @@ defmodule BlockScoutWeb.ApiRouter do
       get("/:address_hash_param/withdrawals", V2.AddressController, :withdrawals)
       get("/:address_hash_param/verifiers", V2.AmcController, :verifiers)
       get("/:address_hash_param/rewards", V2.AmcController, :rewards)
+      get("/:address_hash_param/verify_daily", V2.AmcController, :verify_daily)
     end
 
     scope "/tokens" do

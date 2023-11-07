@@ -508,6 +508,10 @@ defmodule BlockScoutWeb.Chain do
     %{"block_number" => number}
   end
 
+  defp paging_params(%{address_hash: address_hash, epoch: epoch}) do
+    %{"epoch" => epoch}
+  end
+
   defp paging_params(%Verifier{address_hash: address_hash}) do
     %{"address_hash" => address_hash}
   end

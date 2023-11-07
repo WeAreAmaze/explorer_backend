@@ -71,6 +71,8 @@ defmodule Explorer.Chain do
 
   alias Explorer.Chain.Block.Verifier, as: AMCVerifier
 
+  alias Explorer.Chain.Amc.AddressVerifyDaily
+
 
   alias Explorer.Chain.Cache.{
     Accounts,
@@ -99,6 +101,8 @@ defmodule Explorer.Chain do
   alias Dataloader.Ecto, as: DataloaderEcto
 
   @default_paging_options %PagingOptions{page_size: 50}
+
+  @default_address_to_verify_daily_paging_options %PagingOptions{page_size: 7}
 
   @token_transfers_per_transaction_preview 10
   @token_transfers_necessity_by_association %{
@@ -892,6 +896,58 @@ defmodule Explorer.Chain do
     |> limit(^paging_options.page_size)
     |> Repo.all()
   end
+
+#   @spec address_to_verify_daily(Hash.Full.t(), [paging_options | necessity_by_association_option], true | false) :: [
+#      AddressVerifyDaily.t()
+#   ]
+  def address_to_verify_daily(address_hash, options \\ []) when is_list(options) do
+    paging_options = Keyword.get(options, :paging_options, @default_address_to_verify_daily_paging_options)
+
+    start_epoch =
+      case paging_options do
+        %PagingOptions{key: {epoch}} when is_integer(epoch) ->
+          epoch
+        %PagingOptions{key: nil} ->
+          block_number_to_epoch(block_height())
+        end
+
+    end_epoch = start_epoch - paging_options.page_size
+
+
+
+    allAddressVerifyDaily = Enum.reduce(start_epoch..end_epoch, %MapSet{} , fn epoch, acc ->
+      MapSet.put(acc, %AddressVerifyDaily{address_hash: address_hash, epoch: epoch, verify_count: 0})
+    end)
+
+
+    dbAddressVerifyDaily =
+      from(a in AddressVerifyDaily,
+        where: a.address_hash == ^address_hash and a.epoch >= ^end_epoch and a.epoch <= ^start_epoch,
+        order_by: [desc: a.epoch],
+      )
+      |> Repo.all()
+
+    mergedMapSet =
+      Enum.reduce(dbAddressVerifyDaily, allAddressVerifyDaily, fn record, acc ->
+        case MapSet.member?(acc, record) do
+          true -> acc  # 如果 MapSet 中已经存在该记录，不添加
+          false -> MapSet.put(acc, record)  # 如果 MapSet 中不存在该记录，添加到 MapSet 中
+        end
+      end)
+
+
+    mergedMapSet |> MapSet.to_list() |> Enum.sort_by(fn item -> item.epoch end, &>=/2)
+
+  end
+
+  defp block_number_to_epoch(block_number) do
+    beijing_block = Application.get_all_env(:indexer)[Indexer.Fetcher.Amc][:beijing_block]
+    epoch_length = Application.get_all_env(:indexer)[Indexer.Fetcher.Amc][:apos_epoch]
+
+    adjusted_number = block_number - beijing_block + 1
+    div(adjusted_number - 1, epoch_length) + 1
+  end
+
 
   # @spec block_to_miner_rewards(Hash.Full.t(), [paging_options | necessity_by_association_option], true | false) :: [
   #   Verifier.t()

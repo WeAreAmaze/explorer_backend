@@ -82,6 +82,33 @@ defmodule BlockScoutWeb.API.V2.AmcController do
     end
   end
 
+
+  @spec verify_daily(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def verify_daily(conn, %{"address_hash_param" => address_hash_string} = params) do
+    with {:format, {:ok, address_hash}} <- {:format, Chain.string_to_address_hash(address_hash_string)},
+         {:ok, false} <- AccessHelper.restricted_access?(address_hash_string, params),
+         {:not_found, {:ok, address}} <- {:not_found, Chain.hash_to_address(address_hash, @api_true, false)} do
+
+      full_options =
+        @block_params
+        |> Keyword.merge(put_key_value_to_paging_options(paging_options(params), :is_index_in_asc_order, true))
+        |> Keyword.merge(@api_true)
+
+      address_verify_daily_plus_one = Chain.address_to_verify_daily(address.hash, full_options)
+
+
+      {address_verify_daily, next_page} = split_list_by_page(address_verify_daily_plus_one)
+
+      next_page_params =
+        next_page
+        |> next_page_params(address_verify_daily, delete_parameters_from_next_page_params(params))
+
+      conn
+      |> put_status(200)
+      |> render(:address_verify_daily, %{address_verify_daily: address_verify_daily, next_page_params: next_page_params})
+    end
+  end
+
   @spec rewards(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def rewards(conn, %{"address_hash_param" => address_hash_string} = params) do
     with {:format, {:ok, address_hash}} <- {:format, Chain.string_to_address_hash(address_hash_string)},

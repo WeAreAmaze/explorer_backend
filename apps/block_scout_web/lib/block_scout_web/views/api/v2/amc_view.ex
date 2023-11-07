@@ -45,6 +45,21 @@ defmodule BlockScoutWeb.API.V2.AmcView do
   end
 
   @spec render(String.t(), map()) :: map()
+  def render("address_verify_daily.json", %{address_verify_daily: address_verify_daily, next_page_params: next_page_params}) do
+    %{
+      items:
+        Enum.map(address_verify_daily, fn address_verify_daily ->
+           %{
+             "address_hash" => address_verify_daily.address_hash,
+             "epoch" => address_verify_daily.epoch,
+             "verify_count" => address_verify_daily.verify_count
+           }
+        end),
+      next_page_params: next_page_params
+    }
+  end
+
+  @spec render(String.t(), map()) :: map()
   def render("address_rewards_list.json", %{rewards: rewards, next_page_params: next_page_params}) do
     %{
       items:
