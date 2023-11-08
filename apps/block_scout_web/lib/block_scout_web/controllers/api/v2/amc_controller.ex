@@ -27,6 +27,8 @@ defmodule BlockScoutWeb.API.V2.AmcController do
     api?: true
   ]
 
+  @default_address_to_verify_daily_paging_options [page_size: 7]
+
   action_fallback(BlockScoutWeb.API.V2.FallbackController)
 
   @spec verifiers(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -90,9 +92,9 @@ defmodule BlockScoutWeb.API.V2.AmcController do
          {:not_found, {:ok, address}} <- {:not_found, Chain.hash_to_address(address_hash, @api_true, false)} do
 
       full_options =
-        @block_params
-        |> Keyword.merge(put_key_value_to_paging_options(paging_options(params), :is_index_in_asc_order, true))
-        |> Keyword.merge(@api_true)
+        @api_true
+        |> Keyword.merge(paging_options(params))
+        |> Keyword.merge(@default_address_to_verify_daily_paging_options)
 
       address_verify_daily_plus_one = Chain.address_to_verify_daily(address.hash, full_options)
 

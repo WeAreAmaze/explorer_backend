@@ -20,6 +20,7 @@ defmodule BlockScoutWeb.Chain do
   alias Explorer.Chain.Block.Reward
   alias Explorer.Chain.Block.MinnerReward
   alias Explorer.Chain.Block.Verifier
+  alias Explorer.Chain.Amc.AddressVerifyDaily
 
   alias Explorer.Chain.{
     Address,
@@ -508,7 +509,7 @@ defmodule BlockScoutWeb.Chain do
     %{"block_number" => number}
   end
 
-  defp paging_params(%{address_hash: address_hash, epoch: epoch}) do
+  defp paging_params(%AddressVerifyDaily{epoch: epoch}) do
     %{"epoch" => epoch}
   end
 

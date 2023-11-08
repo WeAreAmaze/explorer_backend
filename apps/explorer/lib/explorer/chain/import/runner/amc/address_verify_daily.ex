@@ -103,19 +103,9 @@ defmodule Explorer.Chain.Import.Runner.Amc.AddressVerifyDaily do
   end
 
   defp compose_change(change, acc) do
-    key = {change.address_hash, change.epoch}
-
-    #Logger.error("-----compose_change------import---")
-
-    case Map.get(acc, key) do
-      nil ->
-        Map.update(acc, key, change, fn _ -> change end)
-
-      existing_change ->
-        new_value = existing_change.verify_count + change.verify_count
-        updated_change = %{existing_change | value: new_value}
-        Map.update(acc, key, updated_change, fn _ -> updated_change end)
-    end
+    Map.update(acc, {change.address_hash, change.epoch}, change, fn existing_change ->
+      %{existing_change | verify_count: existing_change.verify_count + change.verify_count}
+    end)
   end
 
   def default_on_conflict do
