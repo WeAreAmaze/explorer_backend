@@ -911,14 +911,7 @@ defmodule Explorer.Chain do
           block_number_to_epoch(block_height())
         end
 
-    end_epoch = start_epoch - paging_options.page_size
-
-
-
-    allAddressVerifyDaily = Enum.reduce(start_epoch..end_epoch, %MapSet{} , fn epoch, acc ->
-      MapSet.put(acc, %AddressVerifyDaily{address_hash: address_hash, epoch: epoch, verify_count: 0})
-    end)
-
+    end_epoch = max(start_epoch - paging_options.page_size, 1)
 
     dbAddressVerifyDaily =
       from(a in AddressVerifyDaily,
@@ -927,16 +920,16 @@ defmodule Explorer.Chain do
       )
       |> Repo.all()
 
-    mergedMapSet =
-      Enum.reduce(dbAddressVerifyDaily, allAddressVerifyDaily, fn record, acc ->
-        case MapSet.member?(acc, record) do
-          true -> acc  # 如果 MapSet 中已经存在该记录，不添加
-          false -> MapSet.put(acc, record)  # 如果 MapSet 中不存在该记录，添加到 MapSet 中
-        end
-      end)
+    allAddressVerifyDaily = Enum.reduce(start_epoch..end_epoch, dbAddressVerifyDaily , fn epoch, acc ->
+      if Enum.any?(acc, fn e -> e.epoch == epoch end) do
+        acc
+      else
+        [%AddressVerifyDaily{address_hash: address_hash, epoch: epoch, verify_count: 0} | acc]
+      end
+    end)
+    |> Enum.sort_by(fn item -> item.epoch end, &>=/2)
 
-
-    mergedMapSet |> MapSet.to_list() |> Enum.sort_by(fn item -> item.epoch end, &>=/2)
+    allAddressVerifyDaily
 
   end
 

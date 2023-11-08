@@ -7,7 +7,7 @@ defmodule Indexer.Transform.Amc.AddressVerifyDaily do
 
   def params_set(%{verifiers_params: verifiers_params_list, blocks: blocks}) do
 
-    coin_balances_daily_params_list =
+    verifiers_daily_params_list =
       Enum.reduce(verifiers_params_list, [], fn verifiers_params, acc ->
         address_hash = Map.get(verifiers_params, :address_hash)
         block_number = Map.get(verifiers_params, :block_number)
@@ -16,13 +16,9 @@ defmodule Indexer.Transform.Amc.AddressVerifyDaily do
 
         [%{address_hash: address_hash, epoch: epoch, verify_count: 1} | acc]
       end)
+      |> Enum.reverse()
 
-    coin_balances_daily_params_set =
-      coin_balances_daily_params_list
-      |> Enum.uniq()
-      |> Enum.into(MapSet.new())
-
-    coin_balances_daily_params_set
+    verifiers_daily_params_list
   end
   
   defp number_to_epoch(block_number) do
