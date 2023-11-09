@@ -15,6 +15,7 @@ defmodule BlockScoutWeb.API.V2.AmcController do
   import BlockScoutWeb.PagingHelper, only: [delete_parameters_from_next_page_params: 1]
 
   alias Explorer.Chain
+  alias Explorer.PagingOptions
   alias BlockScoutWeb.AccessHelper
 
   @api_true [api?: true]
@@ -27,7 +28,7 @@ defmodule BlockScoutWeb.API.V2.AmcController do
     api?: true
   ]
 
-  @default_address_to_verify_daily_paging_options [page_size: 7]
+  @verify_daily_page_size 7
 
   action_fallback(BlockScoutWeb.API.V2.FallbackController)
 
@@ -91,15 +92,22 @@ defmodule BlockScoutWeb.API.V2.AmcController do
          {:ok, false} <- AccessHelper.restricted_access?(address_hash_string, params),
          {:not_found, {:ok, address}} <- {:not_found, Chain.hash_to_address(address_hash, @api_true, false)} do
 
+      start_epoch  =
+        case Map.get(params, "epoch", nil) do
+          epoch_str when is_binary(epoch_str) -> String.to_integer(epoch_str)
+          nil -> block_number_to_epoch(Chain.block_height())
+        end
+
+      params = Map.put(params, "epoch", start_epoch)
+
       full_options =
         @api_true
         |> Keyword.merge(paging_options(params))
-        |> Keyword.merge(@default_address_to_verify_daily_paging_options)
 
       address_verify_daily_plus_one = Chain.address_to_verify_daily(address.hash, full_options)
 
 
-      {address_verify_daily, next_page} = split_list_by_page(address_verify_daily_plus_one)
+      {address_verify_daily, next_page} = Enum.split(address_verify_daily_plus_one, @verify_daily_page_size)
 
       next_page_params =
         next_page
@@ -109,6 +117,14 @@ defmodule BlockScoutWeb.API.V2.AmcController do
       |> put_status(200)
       |> render(:address_verify_daily, %{address_verify_daily: address_verify_daily, next_page_params: next_page_params})
     end
+  end
+
+  defp block_number_to_epoch(block_number) do
+    beijing_block = Application.get_all_env(:indexer)[Indexer.Fetcher.Amc][:beijing_block]
+    epoch_length = Application.get_all_env(:indexer)[Indexer.Fetcher.Amc][:apos_epoch]
+
+    adjusted_number = block_number - beijing_block + 1
+    div(adjusted_number - 1, epoch_length) + 1
   end
 
   @spec rewards(Plug.Conn.t(), map()) :: Plug.Conn.t()
