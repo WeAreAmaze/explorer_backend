@@ -102,8 +102,6 @@ defmodule Explorer.Chain do
 
   @default_paging_options %PagingOptions{page_size: 50}
 
-  @default_address_to_verify_daily_paging_options %PagingOptions{page_size: 7}
-
   @token_transfers_per_transaction_preview 10
   @token_transfers_necessity_by_association %{
     [from_address: :smart_contract] => :optional,
@@ -901,14 +899,12 @@ defmodule Explorer.Chain do
 #      AddressVerifyDaily.t()
 #   ]
   def address_to_verify_daily(address_hash, options \\ []) when is_list(options) do
-    paging_options = Keyword.get(options, :paging_options, @default_address_to_verify_daily_paging_options)
+    paging_options = Keyword.get(options, :paging_options)
 
     start_epoch =
       case paging_options do
         %PagingOptions{key: {epoch}} when is_integer(epoch) ->
           epoch
-        %PagingOptions{key: nil} ->
-          block_number_to_epoch(block_height())
         end
 
     end_epoch = max(start_epoch - paging_options.page_size, 1)
@@ -931,14 +927,6 @@ defmodule Explorer.Chain do
 
     allAddressVerifyDaily
 
-  end
-
-  defp block_number_to_epoch(block_number) do
-    beijing_block = Application.get_all_env(:indexer)[Indexer.Fetcher.Amc][:beijing_block]
-    epoch_length = Application.get_all_env(:indexer)[Indexer.Fetcher.Amc][:apos_epoch]
-
-    adjusted_number = block_number - beijing_block + 1
-    div(adjusted_number - 1, epoch_length) + 1
   end
 
 
