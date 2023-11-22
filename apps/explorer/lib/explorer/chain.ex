@@ -5302,6 +5302,17 @@ defmodule Explorer.Chain do
     |> Enum.map(&put_owner_to_token_instance(&1, options))
   end
 
+  @spec address_to_unique_tokens_721(Hash.Address.t(), [paging_options | api?]) :: [Instance.t()]
+  def address_to_unique_tokens_721(address_hash, options \\ []) do
+    paging_options = Keyword.get(options, :paging_options, @default_paging_options)
+
+    address_hash
+    |> Instance.address_to_unique_token_instances_721()
+    |> Instance.page_token_instance(paging_options)
+    |> limit(^paging_options.page_size)
+    |> select_repo(options).all()
+  end
+
   def put_owner_to_token_instance(%Instance{} = token_instance, options \\ []) do
     owner =
       token_instance
