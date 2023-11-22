@@ -27,16 +27,16 @@ defmodule Indexer.Transform.AddressCoinBalances do
     end)
   end
   # todo
-  defp reducer({:blocks_params1, blocks_params1}, acc) when is_list(blocks_params1) do
-    # a block MUST have a hash and number
-    blocks_params1
-    |> Enum.into(acc, fn
-      %{hash: block_hash, number: block_number}
-      when is_binary(block_hash) and is_integer(block_number) ->
-        %{block_hash: block_hash, block_number: block_number}
-        # MapSet.put(acc, %{block_hash: block_hash, block_number: block_number})
-    end)
-  end
+#  defp reducer({:blocks_params1, blocks_params1}, acc) when is_list(blocks_params1) do
+#    # a block MUST have a hash and number
+#    blocks_params1
+#    |> Enum.into(acc, fn
+#      %{hash: block_hash, number: block_number}
+#      when is_binary(block_hash) and is_integer(block_number) ->
+#        %{block_hash: block_hash, block_number: block_number}
+#        # MapSet.put(acc, %{block_hash: block_hash, block_number: block_number})
+#    end)
+#  end
 
   defp reducer({:verifiers_params, verifiers_params}, initial) when is_list(verifiers_params) do
     Enum.into(verifiers_params, initial, fn %{address: address, public_key: public_key}
